@@ -825,3 +825,34 @@ After commit
 revert
  git revert id    <
                   >
+touch list1
+git add .
+git list2
+touch list2
+git stash -u
+git status
+git log --oneline
+git stash list
+vi file2
+git add file2
+git commit -m "file2"
+cat file2
+vi file2
+git add file2
+git status
+git restore --staged file2
+git restore -- staged file2
+git restore --staged file2
+git --help
+git revert file2
+git status
+git log --oneline
+git revert b8869d6
+git reset --hard b8869d6
+ls
+cat file2
+git log --oneline
+git commit -m "file2"
+git revert b8869d6
+ls
+git log --oneline
