@@ -805,7 +805,7 @@ git stash list
 git stash pop
 git stash list
 git commit -m "stashpop"
-git stash -u (it will take staging and index area as well)
+git stash -u (it will take working area and staging area as well MEANS "Un Tracked and Changes to be Commited ")
 ls
 git branch
 git checkout master
