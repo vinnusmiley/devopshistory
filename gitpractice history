@@ -806,8 +806,22 @@ git stash pop
 git stash list
 git commit -m "stashpop"
 git stash -u (it will take working area and staging area as well MEANS "Un Tracked and Changes to be Commited ")
+git store --staged filename
+git status
 ls
 git branch
 git checkout master
 git merge test master
 git push
+Undoing change (Before commit)
+reset     <
+ git reset--soft      1.soft It will reflect on Repositry
+ git reset-- mixed    2.mixed It will reflect on Repositry and Staging Area
+ git reset-- hard     3.hard It will reflect on Repositry and Staging Area and Working directory also
+           >
+           
+git reset 
+After commit
+revert
+ git revert id    <
+                  >
