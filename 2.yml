@@ -1,0 +1,12 @@
+- name: Make tempdir for tests
+      tempfile:
+        path: "/tmp"
+        state: directory
+      notify: Cleanup tempdir
+      tags:
+        - test
+      register: tempdir
+    - name: Make virtualenv for tests
+      command: virtualenv "{{ tempdir.path }}/venv"
+      tags:
+        - test
