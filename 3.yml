@@ -1,0 +1,57 @@
+- name: Make tmp/src dir
+      file:
+        name: "{{ tempdir.path }}/src"
+        state: directory
+      tags:
+        - test
+    - name: Unarchive the sdist
+      command: "tar -xzf {{ cwd }}/dist/ansible-container-{{ ansible_container_version }}.tar.gz"
+      args:
+        chdir: "{{ tempdir.path }}/src"
+      tags:
+        - test
+    - name: Install from sdist
+      command: "{{ tempdir.path }}/venv/bin/pip install -e .[docker]"
+      args:
+        chdir: "{{ tempdir.path }}/src/ansible-container-{{ ansible_container_version }}"
+      tags:
+        - test
+    - name: Install ansible
+      command: "{{ tempdir.path }}/venv/bin/pip install ansible>=2.3"
+      tags:
+        - test
+    - name: Run full test suite
+      command: "{{ tempdir.path }}/venv/bin/ansible-playbook -vvv test/run_tests.yml"
+      args:
+        chdir: "{{ cwd }}"
+      environment:
+        TMPDIR: /tmp
+      tags:
+        - test
+    - name: Preflight checks [git branch]
+      command: git rev-parse --abbrev-ref HEAD
+      register: git_branch
+      tags:
+        - release
+    - name: Preflight checks
+      assert:
+        that:
+          - "{{ git_branch.stdout }} == 'master'"
+      tags:
+        - release
+    - name: Confirm release
+      pause:
+        prompt: >
+            Are you sure you want to release Ansible Container
+            {{ ansible_container_version }} to PyPI?
+      tags:
+        - release
+    - name: Upload to PyPI
+      command: python setup.py upload
+      tags:
+        - release
+  handlers:
+    - name: Cleanup tempdir
+      file:
+        path: "{{ tempdir.path }}"
+        state: absent
