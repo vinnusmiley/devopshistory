@@ -113,5 +113,28 @@ cp /etc/sudoers /etc/sudoers.original
 visudo
 chmod 0440 /etc/sudoers
 exit
+docker run -dit --name my-running-app -p 8080:80 httpd
+docker ps
+docker inspect 7fb583c90a63
+curl 172.17.0.2
+vi index.html
+cp index.html /usr/local/apche2/htdocs/
+cp index.html /usr/local/apche2/htdocs/index.html
+ls
+docker cp /index.html 7fb583c90a63:/usr/local/apache2/htdocs
+docker cp /root/index.html 7fb583c90a63:/usr/local/apache2/htdocs
+curl 172.17.0.2
+docker stop 7fb583c90a63
+docker ps
+docker ps -a
+docker images
+docker run --name my-nginx -d -p 8080:80 nginx
+docker ps
+docker inspect d80a06a03955
+curl 172.17.0.2
+docker cp /root/index.html d80a06a03955:/usr/share/nginx/html
+curl 172.17.0.2
+docker stop d80a06a03955
+docker volume --help
 
 history | cut -c 8- 
