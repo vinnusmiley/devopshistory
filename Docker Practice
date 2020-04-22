@@ -47,8 +47,9 @@ docker ps
 
 
 
-docker login
+Running container to Convert as a image
 docker commit -m "creating git maven" -a "vinnu@gmail" dc1c8efd6434 gitmaven:1.0
+
 docker images
 docker ps
 docker ps -a
