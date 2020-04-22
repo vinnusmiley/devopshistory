@@ -1,19 +1,12 @@
 git config --global user.email "vinodxavier19@gmail.com"
 git config --global user.name "vinnu"
-cd Downloads/
-ls
-cd ..
-cd Music/
-ls
+
 git init gitprac
 ls -a
 cd gitprac/
 ls -a
 cd .git/
-ls
-cd ..
-ls
-ls -a
+
 ls -a .git
 git status
 touch file1
@@ -27,7 +20,7 @@ git status
 git commit -m "intital commit"
 git log --oneline
 git log
-git show ccd488fae
+git show ccd488fae(id)
 touch file3
 git add file3
 git commit -m "file3"
@@ -54,13 +47,6 @@ cd remote.git/
 ls -a
 cd ..
 git clone remote.git/ wsp1
-touch a
-git add a
-la -a
-rm wsp1/
-rm -r wsp1/
-ls
-git clone remote.git/ wsp1
 ls
 cd wsp1/
 ls
@@ -79,7 +65,6 @@ git add c
 git commit -m "c"
 git status
 git log --oneline
-git pusg
 git push
 cd ..
 git clone remote.git/ wsp2
@@ -94,10 +79,6 @@ git push
 cd ..
 cd wsp1
 git pull
-ls
-cd ..
-ls
-rm -r a
 git clone https://github.com/vinnusmiley/gitrepo25.git
 cd gitrepo25/
 ls
@@ -157,7 +138,7 @@ ls
 git branch
 git checkout master
 git branch
-lsgit config --global user.email "vinodxavier19@gmail.com"
+git config --global user.email "vinodxavier19@gmail.com"
 git config --global user.name "vinnu"
 cd Downloads/
 ls
@@ -253,10 +234,6 @@ git push
 cd ..
 cd wsp1
 git pull
-ls
-cd ..
-ls
-rm -r a
 git clone https://github.com/vinnusmiley/gitrepo25.git
 cd gitrepo25/
 ls
@@ -498,9 +475,6 @@ cd repo50/
 ls
 git push all
 git push -u origin --all
-notepad plus plus
-history
-history | cut -c 8-
 git pull
 ls
 git branch test
@@ -745,9 +719,6 @@ cd repo50/
 ls
 git push all
 git push -u origin --all
-notepad plus plus
-history
-history | cut -c 8-
 git pull
 ls
 git branch test
