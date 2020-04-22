@@ -1,0 +1,116 @@
+docker login
+docker run -it myubuntu1 ubuntu
+docker run -it --name myubuntu1 ubuntu
+docker run -it --name myhttpd httpd
+docker run -it --name tomcat1 tomcat:9.0
+docker run -it --name tomcat1 -p 8888:8080 tomcat:9.0
+docker ps
+docker ps -aq
+docker ps -a
+docker stop ebf04c26921
+docker run -it --name c1 -v /app ubuntu
+dockdocker inspect c1
+docker run -it --name c1 -v app2:/app2 ubuntu
+docker run -it --name c2 -v app2:/app2 ubuntu
+docker ps
+docker stop df446cca3ac8
+docker stop 40cb28625d29 
+docker ps
+docker ps -a
+docker images
+docker run -it --name mycentos centos
+docker run -it --name mywordpress wordpress
+docker images
+docker ps
+docker ps -a
+
+
+docker login
+docker run -it myjenkins jenkins
+docker run -it mynginx nginx
+docker login
+docker run -it mynginx nginx
+docker ps 
+docker stop docker run -it myjenkins jenkins
+docker run -it --name myubuntu ubuntu
+docker images
+docker run -it --name mynginx nginx
+docker ps -a
+docker images
+docker ps -a
+docker run -it myubuntu /bin/bash
+docker run -it ubuntu /bin/bash
+docker ps
+docker ps -a
+docker attach dc1c8efd6434
+docker ps
+
+
+
+docker login
+docker commit -m "creating git maven" -a "vinnu@gmail" dc1c8efd6434 gitmaven:1.0
+docker images
+docker ps
+docker ps -a
+docker run -it --name mygitmaven gitmaven:1.0
+docker ps
+docker images
+docker tag gitmaven:1.0 vinnuvikki/gitmaven:2.0
+docker images
+docker push vinnuvikki/gitmaven:2.0
+docker exec -it 
+gitmaven:2.0
+docker exec -it gitmaven:2.0 git --version
+docker ps
+docker exec -it --name g1 
+docker attach dee009913eb9
+docker exec -it mygitmaven git --version
+docker exec -it mygitmaven mvn --version
+docker exec -it keen_swirles apt-get update -y
+mkdir demo
+cd demo/
+vim Dockerfile
+docker build -t demo .
+docker images
+docker exec -it demo 
+docker exec -it demo apt-get update
+vim Dockerfile
+docker build -t demo .
+docker ps
+docker images
+docker run -it demo bash
+vim Dockerfile
+docker run -it demo bash
+docker run -it -w /app demo
+docker run -d -p 80:80 httpd
+docker ps
+docker attach f35a756e47cd
+docker run -d -p 80:80 httpd
+docker ps
+docker inspect c0f9a18a6f35
+docker run -d -p 8080:80 httpd
+docker ps
+docker inspect 41feeac6a8e4
+curl 172.17.0.10
+pwd
+vi index.html
+docker cp /root/demo/index.html 41feeac6a8e4:/usr/local/apache2/htdocs
+curl 172.17.0.10
+docker stop 41feeac6a8e4
+docker run -d --name mytomcat -p 8080:80 tomcat
+docker images
+docker run -d  -p 8080:80 tomcat
+docker start tomcat 
+docker start tomcat:9.0
+docker run -it tomcat
+docker run -it 81a4731e5497
+
+
+mount -o rw,remount /
+adduser vinnu sudo
+cp /etc/sudoers /etc/sudoers.original
+visudo
+chmod 0440 /etc/sudoers
+exit
+
+history | cut -c 8- 
