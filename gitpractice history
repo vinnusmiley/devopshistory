@@ -9,9 +9,7 @@ cd .git/
 
 ls -a .git
 git status
-touch file1
-git status
-touch file2
+touch file1 file2
 git status
 git add file1
 git status
@@ -24,22 +22,9 @@ git show ccd488fae(id)
 touch file3
 git add file3
 git commit -m "file3"
-git log
-git log --oneline
-git log -1
-git log --oneline-1
 git log --oneline -1
-git log --oneline -2
 git log --oneline --grep "file"
 ls -a .git
-ls -a
-pwd
-cd ..
-ls
-cd gitprac/
-ls
-cd ..
-ls
 mkdir gitrepo
 cd gitrepo/
 git init --bare remote.git
@@ -47,20 +32,16 @@ cd remote.git/
 ls -a
 cd ..
 git clone remote.git/ wsp1
-ls
 cd wsp1/
-ls
 ls -a
 touch a
 git add a
+git commit -m "a"
 git status
 touch b
 git add b
-git commit -m "a"
 git commit -m "b"
 touch c
-git commit -am "c"
-git status
 git add c
 git commit -m "c"
 git status
@@ -89,8 +70,6 @@ touch b
 git add b
 git commit -m "b"
 git push
-history
-ls
 vi sample.java
 git status
 ls
@@ -116,12 +95,6 @@ git pull
 ls
 cd gitrepo25/
 ls
-git pull
-cat README.md 
-vi README.md 
-git push
-vi README.md 
-git push
 git pull
 git push
 ls
@@ -140,156 +113,6 @@ git checkout master
 git branch
 git config --global user.email "vinodxavier19@gmail.com"
 git config --global user.name "vinnu"
-cd Downloads/
-ls
-cd ..
-cd Music/
-ls
-git init gitprac
-ls -a
-cd gitprac/
-ls -a
-cd .git/
-ls
-cd ..
-ls
-ls -a
-ls -a .git
-git status
-touch file1
-git status
-touch file2
-git status
-git add file1
-git status
-git add .
-git status
-git commit -m "intital commit"
-git log --oneline
-git log
-git show ccd488fae
-touch file3
-git add file3
-git commit -m "file3"
-git log
-git log --oneline
-git log -1
-git log --oneline-1
-git log --oneline -1
-git log --oneline -2
-git log --oneline --grep "file"
-ls -a .git
-ls -a
-pwd
-cd ..
-ls
-cd gitprac/
-ls
-cd ..
-ls
-mkdir gitrepo
-cd gitrepo/
-git init --bare remote.git
-cd remote.git/
-ls -a
-cd ..
-git clone remote.git/ wsp1
-touch a
-git add a
-la -a
-rm wsp1/
-rm -r wsp1/
-ls
-git clone remote.git/ wsp1
-ls
-cd wsp1/
-ls
-ls -a
-touch a
-git add a
-git status
-touch b
-git add b
-git commit -m "a"
-git commit -m "b"
-touch c
-git commit -am "c"
-git status
-git add c
-git commit -m "c"
-git status
-git log --oneline
-git pusg
-git push
-cd ..
-git clone remote.git/ wsp2
-ls
-cd wsp2
-ls -a
-git log --oneline
-touch d
-git add d
-git commit -m "d"
-git push
-cd ..
-cd wsp1
-git pull
-git clone https://github.com/vinnusmiley/gitrepo25.git
-cd gitrepo25/
-ls
-touch a
-git add a
-git commit -m "a"
-touch b
-git add b
-git commit -m "b"
-git push
-history
-ls
-vi sample.java
-git status
-ls
-vi sam.mp4
-ls
-git status
-vi .gitignore
-cat .gitignore 
-git status 
-git stash -a
-cat .gitignore 
-git show 54788d6 b
-cd ..
-ls
-git clone central.git wsp1
-cd ..
-ls
-cd gitrepo/
-git pull
-ls
-gitrepo25/
-git pull
-ls
-cd gitrepo25/
-ls
-git pull
-cat README.md 
-vi README.md 
-git push
-vi README.md 
-git push
-git pull
-git push
-ls
-git branch
-git branch test
-git branch
-git checkout test 
-git branch
-ls
-touch d
-git add . && git commit -m "d"
-git checkout
-ls
 git branch
 git checkout master
 git branch
@@ -469,16 +292,6 @@ cd ..
 ls
 git remote set-url origin git@https://github.com/vinnusmiley/repo50.git
 git remote set-url origin git@https://github.com/vinnusmiley/repo50
-cat ~/.ssh/id_rsa.pub
-ls
-cd repo50/
-ls
-git push all
-git push -u origin --all
-git pull
-ls
-git branch test
-git checkout test
 git pull
 ls
 cat File1.yaml 
@@ -536,187 +349,6 @@ ls
 git branch
 git checkout master
 git merge test master
-git push
-
-git merge test master
-ls
-git log --oneline
-git checkout test 
-git log --oneline
-git checkout master
-git checkout -b win
-ls
-git status
-touch n
-touch o
-touch p
-git add n
-git add o
-git add p
-git commit -m "n"
-git commit -m "o"
-ls
-git reflog
-git rebase -i HEAD~3
-git rebase -i HEAD~5
-git rebase -i HEAD~6
-git rebase -i HEAD~8
-git rebase -i HEAD~7
-git log --oneline
-git show 6defaef
-git show 6eee47a 
-ls
-git checkout test
-touch u
-touch v
-ls
-git checkout master 
-git checkout test
-git log --oneline
-git checkout master
-git checkout test
-ls -a
-git status
-git add u
-git commit -m "u"
-git log --oneline
-git checkout master
-git cherry-pick f87e64d
-ls
-git checkout test
-ls
-git add v
-git commit -m "v"
-ls
-git master
-git branch
-git branch master
-git checkout master
-ls
-git reflog 
-git cherry-pick 563fd8a 
-ls
-exit
-cd Music/
-ls
-cd git
-ls
-cd gitrepo/
-ls
-mkdir central.git
-cd central.git/
-git init --bare
-git status
-git branch
-cd ..
-ls
-git clone central.git/ wsp3
-cd wsp3
-ls
-ls -a
-git add a
-git add v
-ls -a
-git log --oneline
-touch a
-git add a
-git commit -m "a"
-touch b
-git add b && git commit -m "a"
-git log --oneline
-git checkout -b test
-touch c 
-git add c && git commit -m "c"
-touch d
-git add d && git commit -m "d"
-git checkout master
-touch e
-git add e && git commit -m "e"
-touch f
-git add f && git commit -m "f"
-git rebase master
-git branch
-git branch test 
-git checkout test
-ls
-git rebase master
-git merge master
-ls
-git merge test
-cd ..
-ls
-ls -a central.git/
-cd central.git/
-ls
-cd branches/
-ls
-cd ..
-ls
-git clone central.git/ wsp4
-cd wsp4
-ls
-cd ..
-cd wsp3
-ls
-git push
-cd ..
-ls
-cd ..
-ls
-cd gitprac/
-ls
-git clone https://github.com/vinnusmiley/gitrepo25.git
-cd gitrepo25/
-ls
-git add sample
-touch sample
-vi sample 
-git add sample && git commit -m "sample"
-ls
-cat sample 
-git checkout -b test
-ls
-touch sample1
-git add sample1 && git commit -m "sample1"
-git checkout master
-ls
-git merge test master
-ls
-git push
-ls
-git checkout master
-git checkout test
-ls
-git checkout master
-git push all
-eval $(ssh-agent -s)
-git clone https://github.com/vinnusmiley/repo50.git
-ls
-cd repo50/
-ls
-cat 1.yml 
-git branch
-git checkout -b test
-ls
-echo a
-touch sample 
-git add sample && git commit -m "sample"
-git rebase master
-ls
-git checkout master
-ls
-git merge test master
-ls
-git push
-git push all
-cd ..
-ls
-git remote set-url origin git@https://github.com/vinnusmiley/repo50.git
-git remote set-url origin git@https://github.com/vinnusmiley/repo50
-cat ~/.ssh/id_rsa.pub
-ls
-cd repo50/
-ls
 git push all
 git push -u origin --all
 git pull
