@@ -136,6 +136,13 @@ docker cp /root/index.html d80a06a03955:/usr/share/nginx/html
 curl 172.17.0.2
 docker stop d80a06a03955
 docker volume --help
+docker volume
+docker images
+docker ps
+docker run -it --name v1 -v /home/ubuntu/app1:/app1 ubuntu [source:Dest] [app1 we create as a volume]
+docker run -it --name v2 -v /home/ubuntu/app1:/app1 ubuntu [attach same volume to the new or existing container]
+docker run -it --name v3 -v /home/ubuntu/app1:/app1 vinnuvikki/gitmaven:2.0
+
 
 
 sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
