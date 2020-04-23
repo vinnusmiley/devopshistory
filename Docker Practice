@@ -137,4 +137,24 @@ curl 172.17.0.2
 docker stop d80a06a03955
 docker volume --help
 
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+mkdir composetest
+cd composetest/
+vi app.py
+vi requirements.txt
+vi Dockerfile
+vi docker-compose.yml
+cat docker-compose.yml
+vi docker-compose.yml
+docker-compose up -d
+docker images
+docker ps
+vi docker-compose.yml [Here we use Volumes concept]
+docker-compose up -d 
+vi app.py [make some modifications] it will efeect on Browser so it is CICD 
+
 history | cut -c 8- 
