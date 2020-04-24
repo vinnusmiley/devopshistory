@@ -5,38 +5,9 @@ docker run -it --name myhttpd httpd
 docker run -it --name tomcat1 tomcat:9.0
 docker run -it --name tomcat1 -p 8888:8080 tomcat:9.0
 docker ps
-docker ps -aq
-docker ps -a
-docker stop ebf04c26921
-docker run -it --name c1 -v /app ubuntu
-dockdocker inspect c1
-docker run -it --name c1 -v app2:/app2 ubuntu
-docker run -it --name c2 -v app2:/app2 ubuntu
-docker ps
-docker stop df446cca3ac8
-docker stop 40cb28625d29 
-docker ps
-docker ps -a
-docker images
-docker run -it --name mycentos centos
-docker run -it --name mywordpress wordpress
-docker images
-docker ps
-docker ps -a
-
-
-docker login
 docker run -it myjenkins jenkins
 docker run -it mynginx nginx
-docker login
 docker run -it mynginx nginx
-docker ps 
-docker stop docker run -it myjenkins jenkins
-docker run -it --name myubuntu ubuntu
-docker images
-docker run -it --name mynginx nginx
-docker ps -a
-docker images
 docker ps -a
 docker run -it myubuntu /bin/bash
 docker run -it ubuntu /bin/bash
@@ -56,15 +27,13 @@ docker ps -a
 docker run -it --name mygitmaven gitmaven:1.0
 docker ps
 docker images
-docker tag gitmaven:1.0 vinnuvikki/gitmaven:2.0
+docker tag gitmaven:1.0 vinnuvikki/gitmaven:2.0 [given tag to container]
 docker images
-docker push vinnuvikki/gitmaven:2.0
-docker exec -it 
-gitmaven:2.0
-docker exec -it gitmaven:2.0 git --version
+docker push vinnuvikki/gitmaven:2.0 [here push to Dockerhub]
+docker exec -it gitmaven:2.0 git --version [here "exec" is used to run a command in a container without logon to it]
 docker ps
 docker exec -it --name g1 
-docker attach dee009913eb9
+docker attach dee009913eb9 [is used to simply login to container]
 docker exec -it mygitmaven git --version
 docker exec -it mygitmaven mvn --version
 docker exec -it keen_swirles apt-get update -y
@@ -88,7 +57,7 @@ docker ps
 docker attach f35a756e47cd
 docker run -d -p 80:80 httpd
 docker ps
-docker inspect c0f9a18a6f35
+docker inspect c0f9a18a6f35 [here see the total data on a container]
 docker run -d -p 8080:80 httpd
 docker ps
 docker inspect 41feeac6a8e4
@@ -107,21 +76,13 @@ docker run -it tomcat
 docker run -it 81a4731e5497
 
 
-mount -o rw,remount /
-adduser vinnu sudo
-cp /etc/sudoers /etc/sudoers.original
-visudo
-chmod 0440 /etc/sudoers
-exit
 docker run -dit --name my-running-app -p 8080:80 httpd
 docker ps
 docker inspect 7fb583c90a63
-curl 172.17.0.2
+curl 172.17.0.2 [is used to see the browsers  message]
 vi index.html
-cp index.html /usr/local/apche2/htdocs/
-cp index.html /usr/local/apche2/htdocs/index.html
+cp index.html /usr/local/apche2/htdocs/index.html [here copy files on local machines]
 ls
-docker cp /index.html 7fb583c90a63:/usr/local/apache2/htdocs
 docker cp /root/index.html 7fb583c90a63:/usr/local/apache2/htdocs
 curl 172.17.0.2
 docker stop 7fb583c90a63
@@ -139,6 +100,23 @@ docker volume --help
 docker volume
 docker images
 docker ps
+docker ps -aq
+docker stop ebf04c26921(your desire container id)
+docker run -it --name c1 -v /app ubuntu ( -v indicate volume : /app is path here default location)
+dockdocker inspect c1
+docker run -it --name c1 -v app2:/app2 ubuntu
+docker run -it --name c2 -v app2:/app2 ubuntu
+docker ps
+docker stop df446cca3ac8
+docker stop 40cb28625d29 
+docker ps
+docker ps -a
+docker images
+docker run -it --name mycentos centos
+docker run -it --name mywordpress wordpress
+docker images
+docker ps
+docker ps -a
 docker run -it --name v1 -v /home/ubuntu/app1:/app1 ubuntu [source:Dest] [app1 we create as a volume]
 docker run -it --name v2 -v /home/ubuntu/app1:/app1 ubuntu [attach same volume to the new or existing container]
 docker run -it --name v3 -v /home/ubuntu/app1:/app1 vinnuvikki/gitmaven:2.0
@@ -157,10 +135,10 @@ vi Dockerfile
 vi docker-compose.yml
 cat docker-compose.yml
 vi docker-compose.yml
-docker-compose up -d
+docker-compose up -d [ docker-compose is a command to run docker multi containers]
 docker images
 docker ps
-vi docker-compose.yml [Here we use Volumes concept]
+vi docker-compose.yml [Here we use Volumes concept added in yaml file]
 docker-compose up -d 
 vi app.py [make some modifications] it will efeect on Browser so it is CICD 
 
