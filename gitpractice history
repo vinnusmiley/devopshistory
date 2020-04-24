@@ -426,7 +426,7 @@ reset     <
 git reset 
 After commit
 revert
- git revert id    <
+git revert id    <
                   >
 touch list1
 git add .
