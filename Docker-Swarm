@@ -1,0 +1,317 @@
+  
+ubuntu@manager-1:~$ docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+9uu57havfm1is09411j5m53n1 *   manager-1           Ready               Active              Leader              19.03.6
+m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active                                  19.03.6
+whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
+ubuntu@manager-1:~$ docker node --help
+
+Usage:	docker node COMMAND
+
+Manage Swarm nodes
+
+Commands:
+  demote      Demote one or more nodes from manager in the swarm
+  inspect     Display detailed information on one or more nodes
+  ls          List nodes in the swarm
+  promote     Promote one or more nodes to manager in the swarm
+  ps          List tasks running on one or more nodes, defaults to current node
+  rm          Remove one or more nodes from the swarm
+  update      Update a node
+
+
+ubuntu@manager-1:~$ docker node inspect worker-1
+[
+   
+            "Addr": "10.1.1.179"
+      
+]
+ubuntu@manager-1:~$ docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+9uu57havfm1is09411j5m53n1 *   manager-1           Ready               Active              Leader              19.03.6
+m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active                                  19.03.6
+whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
+ubuntu@manager-1:~$ docker service --help
+
+Manage services
+
+Commands:
+  create      Create a new service
+  inspect     Display detailed information on one or more services
+  logs        Fetch the logs of a service or task
+  ls          List services
+  ps          List the tasks of one or more services
+  rm          Remove one or more services
+  rollback    Revert changes to a service's configuration
+  scale       Scale one or multiple replicated services
+  update      Update a service
+
+Run 'docker service COMMAND --help' for more information on a command.
+ubuntu@manager-1:~$ docker service create --replicas 5 --name myhttpd httpd
+a672h3o3ospf73bifggkq4pgt
+overall progress: 5 out of 5 tasks 
+1/5: running   [==================================================>] 
+2/5: running   [==================================================>] 
+3/5: running   [==================================================>] 
+4/5: running   [==================================================>] 
+5/5: running   [==================================================>] 
+verify: Service converged 
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+a672h3o3ospf        myhttpd             replicated          5/5                 httpd:latest        
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 53 seconds ago                       
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 55 seconds ago                       
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 53 seconds ago                       
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 53 seconds ago                       
+b5ta4laeeq7a        myhttpd.5           httpd:latest        worker-2            Running             Running 53 seconds ago                       
+ubuntu@manager-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+6b80e0e3dec0        httpd:latest        "httpd-foreground"   3 minutes ago       Up 3 minutes        80/tcp              myhttpd.1.qmswcdbx02s6b92xznwxc24vg
+7a095b92fa49        httpd:latest        "httpd-foreground"   3 minutes ago       Up 3 minutes        80/tcp              myhttpd.4.o9szx9iqla4pk5p3lm9nbp90j
+ubuntu@manager-1:~$ docker inspect 6b80e0e3dec0
+[
+    {
+            "Name": "overlay2"
+
+           
+            "IPAddress": "172.17.0.3",
+    
+]
+ubuntu@manager-1:~$ curl 172.17.0.3
+<html><body><h1>It works!</h1></body></html>
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 4 minutes ago                       
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 4 minutes ago                       
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 4 minutes ago                       
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 4 minutes ago                       
+b5ta4laeeq7a        myhttpd.5           httpd:latest        worker-2            Running             Running 4 minutes ago                       
+ubuntu@manager-1:~$ docker service scale myhttpd=8 
+myhttpd scaled to 8
+overall progress: 8 out of 8 tasks 
+1/8: running   [==================================================>] 
+2/8: running   [==================================================>] 
+3/8: running   [==================================================>] 
+4/8: running   [==================================================>] 
+5/8: running   [==================================================>] 
+6/8: running   [==================================================>] 
+7/8: running   [==================================================>] 
+8/8: running   [==================================================>] 
+verify: Service converged 
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 5 minutes ago                        
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 5 minutes ago                        
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 5 minutes ago                        
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 5 minutes ago                        
+b5ta4laeeq7a        myhttpd.5           httpd:latest        worker-2            Running             Running 5 minutes ago                        
+ss6pyvrx0312        myhttpd.6           httpd:latest        worker-1            Running             Running 16 seconds ago                       
+n1etsna11y6k        myhttpd.7           httpd:latest        worker-2            Running             Running 16 seconds ago                       
+cjpchqurw2ds        myhttpd.8           httpd:latest        worker-1            Running             Running 16 seconds ago                       
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+a672h3o3ospf        myhttpd             replicated          8/8                 httpd:latest        
+ubuntu@manager-1:~$ docker service scale myhttpd=4
+myhttpd scaled to 4
+overall progress: 4 out of 4 tasks 
+1/4: running   [==================================================>] 
+2/4: running   [==================================================>] 
+3/4: running   [==================================================>] 
+4/4: running   [==================================================>] 
+verify: Service converged 
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+a672h3o3ospf        myhttpd             replicated          4/4                 httpd:latest        
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 7 minutes ago                       
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 7 minutes ago                       
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 7 minutes ago                       
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 7 minutes ago                       
+ubuntu@manager-1:~$ docker service rm myhttpd 
+myhttpd
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+ubuntu@manager-1:~$ 
+ubuntu@manager-1:~$ docker service create \
+>   --replicas 3 \
+>   --name redis \
+>   --update-delay 10s \
+>   redis:3.0.6
+
+overall progress: 3 out of 3 tasks 
+1/3: running   [==================================================>] 
+2/3: running   [==================================================>] 
+3/3: running   [==================================================>] 
+verify: Service converged
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+uflp5u6f4ce0        redis               replicated          3/3                 redis:3.0.6         
+ubuntu@manager-1:~$ 
+ubuntu@manager-1:~$ docker service inspect --pretty redis
+
+ID:		uflp5u6f4ce0lhfy3imu6zodp
+Name:		redis
+Service Mode:	Replicated
+ Replicas:	3
+Placement:
+UpdateConfig:
+ Parallelism:	1
+ Delay:		10s
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Update order:      stop-first
+RollbackConfig:
+ Parallelism:	1
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Rollback order:    stop-first
+ContainerSpec:
+ Image:		redis:3.0.6
+ Init:		false
+Resources:
+Endpoint Mode:	vip
+
+ubuntu@manager-1:~$ docker service inspect --pretty redis
+
+ID:		uflp5u6f4ce0lhfy3imu6zodp
+Name:		redis
+Service Mode:	Replicated
+ Replicas:	3
+UpdateStatus:
+ State:		completed
+ Started:	59 seconds ago
+ Completed:	5 seconds ago
+ Message:	update completed
+Placement:
+UpdateConfig:
+ Parallelism:	1
+ Delay:		10s
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Update order:      stop-first
+RollbackConfig:
+ Parallelism:	1
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Rollback order:    stop-first
+ContainerSpec:
+ Image:		redis:3.0.7
+ Init:		false
+Resources:
+Endpoint Mode:	vip
+
+ubuntu@manager-1:~$ docker service ps redis 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE                ERROR               PORTS
+prpufnnz3x02        redis.1             redis:3.0.7         manager-1           Running             Running about a minute ago                       
+yj6gp7voyrw9         \_ redis.1         redis:3.0.6         manager-1           Shutdown            Shutdown 2 minutes ago                           
+xg7pkiz04390        redis.2             redis:3.0.7         worker-1            Running             Running 2 minutes ago                            
+wj6k0nv7q1q4         \_ redis.2         redis:3.0.6         worker-1            Shutdown            Shutdown 2 minutes ago                           
+lo2pzht9t6ej        redis.3             redis:3.0.7         worker-2            Running             Running 2 minutes ago                            
+vfcorznsj5ii         \_ redis.3         redis:3.0.6         worker-2            Shutdown            Shutdown 2 minutes ago                           
+
+ubuntu@manager-1:~$ vi bb-stack.yaml
+ubuntu@manager-1:~$ cat bb-stack.yaml
+version: '3.7'
+
+services:
+  bb-app:
+    image: bulletinboard:1.0
+    ports:
+      - "8000:8080"
+
+ubuntu@manager-1:~$ docker stack deploy -c bb-stack.yaml demo
+Creating network demo_default
+Creating service demo_bb-app
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                 MODE                REPLICAS            IMAGE               PORTS
+ejv8vt29rqp9        affectionate_payne   replicated          0/1                 3:latest            
+s7z49hmsa70f        demo_bb-app          replicated          0/1                 bulletinboard:1.0   *:8000->8080/tcp
+x9zby6ypjido        reverent_booth       replicated          0/1                 3:latest            
+ubuntu@manager-1:~$ docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+9uu57havfm1is09411j5m53n1 *   manager-1           Ready               Active              Leader              19.03.6
+m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active                                  19.03.6
+whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
+ubuntu@manager-1:~$ docker service logs demo_bb-app 
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                 MODE                REPLICAS            IMAGE               PORTS
+ejv8vt29rqp9        affectionate_payne   replicated          0/1                 3:latest            
+s7z49hmsa70f        demo_bb-app          replicated          0/1                 bulletinboard:1.0   *:8000->8080/tcp
+x9zby6ypjido        reverent_booth       replicated          0/1                 3:latest            
+ubuntu@manager-1:~$ docker stack rm demo
+Removing service demo_bb-app
+Removing network demo_default
+
+
+
+ubuntu@ip-10-1-1-117:~$ sudo hostnamectl set-hostname worker-1
+ubuntu@ip-10-1-1-117:~$ exit
+
+
+ubuntu@worker-1:~$ docker swarm join --token SWMTKN-1-3vqsfux7zqm62f0vbq02e9op5daa0xdhw50n17rbnavnpqj8na-1kk466msxe9jclmye9ak5tsxs 10.1.1.146:2377
+
+This node joined a swarm as a worker.
+
+ubuntu@worker-1:~$ docker info | grep -i swarm
+ Swarm: active
+WARNING: No swap limit support
+ubuntu@worker-1:~$ docker node ls
+Error response from daemon: This node is not a swarm manager. Worker nodes can't be used to view or modify cluster state. Please run this command on a manager node or promote the current node to a manager.
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS               NAMES
+7db081ffc25e        httpd:latest        "httpd-foreground"   About a minute ago   Up About a minute   80/tcp              myhttpd.7.n1etsna11y6k5nvt7cpi5j8gc
+a033525245dd        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+12b790b7f1ae        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.5.b5ta4laeeq7advchyvcb4oy7z
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+a033525245dd        httpd:latest        "httpd-foreground"   7 minutes ago       Up 7 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+a40e044cbaf6        redis:3.0.7         "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        6379/tcp            redis.3.lo2pzht9t6ej8sd5ae87gcver
+
+
+
+ubuntu@ip-10-1-1-117:~$ sudo hostnamectl set-hostname worker-2
+ubuntu@ip-10-1-1-117:~$ exit
+
+
+ubuntu@worker-2:~$ docker swarm join --token SWMTKN-1-3vqsfux7zqm62f0vbq02e9op5daa0xdhw50n17rbnavnpqj8na-1kk466msxe9jclmye9ak5tsxs 10.1.1.146:2377
+
+This node joined a swarm as a worker.
+
+ubuntu@worker-2:~$ docker info | grep -i swarm
+ Swarm: active
+WARNING: No swap limit support
+ubuntu@worker-2:~$ docker node ls
+Error response from daemon: This node is not a swarm manager. Worker nodes can't be used to view or modify cluster state. Please run this command on a manager node or promote the current node to a manager.
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS               NAMES
+7db081ffc25e        httpd:latest        "httpd-foreground"   About a minute ago   Up About a minute   80/tcp              myhttpd.7.n1etsna11y6k5nvt7cpi5j8gc
+a033525245dd        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+12b790b7f1ae        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.5.b5ta4laeeq7advchyvcb4oy7z
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+a033525245dd        httpd:latest        "httpd-foreground"   7 minutes ago       Up 7 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+a40e044cbaf6        redis:3.0.7         "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        6379/tcp            redis.3.lo2pzht9t6ej8sd5ae87gcver
+
+
+
+
+ubuntu@worker-2:~$ docker swarm leave
+Node left the swarm.
+ubuntu@worker-2:~$ docker info | grep -i swarm
+ Swarm: inactive
+WARNING: No swap limit support
