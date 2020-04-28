@@ -1,0 +1,241 @@
+ubuntu@worker-2:~$ docker run -dit --name c1 alpine
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+cbdbe7a5bc2a: Pull complete 
+Digest: sha256:9a839e63dad54c3a6d1834e29692c8492d93f90c59c978c1ed79109ea4fb9a54
+Status: Downloaded newer image for alpine:latest
+48f2b10ce36be17f0ed34f527b217c005b60c5df132a8fdbdfce7251044792b8
+ubuntu@worker-2:~$ docker run -dit --name c2 alpine
+45d7a25640625960d3e3aed113f9f72616a1551b48b5cdede21df097bd673c20
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+45d7a2564062        alpine              "/bin/sh"           13 seconds ago      Up 11 seconds                           c2
+48f2b10ce36b        alpine              "/bin/sh"           22 seconds ago      Up 20 seconds                           c1
+ubuntu@worker-2:~$ ifconfig
+docker0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+       
+docker_gwbridge: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.18.0.1  netmask 255.255.0.0  broadcast 172.18.255.255
+       
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9001
+        inet 10.1.1.117  netmask 255.255.255.0  broadcast 10.1.1.255
+        
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+     
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+45d7a2564062        alpine              "/bin/sh"           3 minutes ago       Up 3 minutes                            c2
+48f2b10ce36b        alpine              "/bin/sh"           3 minutes ago       Up 3 minutes                            c1
+ubuntu@worker-2:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+455c6e23c18c        bridge              bridge              local
+047ac6fdfdfb        docker_gwbridge     bridge              local
+1e783d0508cc        host                host                local
+6eeb48da3f2d        none                null                local
+ubuntu@worker-2:~$ docker network inspect bridge 
+[
+    {
+        "Name": "bridge",
+        
+        
+        "Containers": {
+            "45d7a25640625960d3e3aed113f9f72616a1551b48b5cdede21df097bd673c20": {
+                "Name": "c2",
+                "IPv4Address": "172.17.0.3/16",
+              
+            },
+            
+                "Name": "c1",         
+                "IPv4Address": "172.17.0.2/16",
+            },  
+        
+ubuntu@worker-2:~$ docker attach c1
+/ # ping -c 3 google.com
+PING google.com (172.217.13.78): 56 data bytes
+64 bytes from 172.217.13.78: seq=0 ttl=50 time=1.062 ms
+64 bytes from 172.217.13.78: seq=1 ttl=50 time=1.125 ms
+64 bytes from 172.217.13.78: seq=2 ttl=50 time=1.126 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 1.062/1.104/1.126 ms
+/ # ping -c 3 c2
+ping: bad address 'c2'
+/ # ping -c 3 172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+64 bytes from 172.17.0.3: seq=0 ttl=64 time=0.087 ms
+64 bytes from 172.17.0.3: seq=1 ttl=64 time=0.081 ms
+64 bytes from 172.17.0.3: seq=2 ttl=64 time=0.089 ms
+
+--- 172.17.0.3 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.081/0.085/0.089 ms
+/ # exit
+ubuntu@worker-2:~$ docker stop c1 c2
+c1
+c2
+ubuntu@worker-2:~$ docker network create mynet --driver bridge
+362a56ef23d34e4d73e95f17c79a4f67b32068c298c966a82b12b0a73a608390
+ubuntu@worker-2:~$ docker network --help
+
+Usage:	docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+ubuntu@worker-2:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+455c6e23c18c        bridge              bridge              local
+047ac6fdfdfb        docker_gwbridge     bridge              local
+1e783d0508cc        host                host                local
+362a56ef23d3        mynet               bridge              local
+6eeb48da3f2d        none                null                local
+ubuntu@worker-2:~$ docker run -dit --name c1 --network mynet alpine
+e56976bf64156d7a4eb917365b16ba0b21aa4d2003a82725e51f9b3009e3dc94
+ubuntu@worker-2:~$ docker run -dit --name c2 --network mynet alpine
+201041fc9cc2f5cec5f1f04205e50e64c47fc87e54b7a9c1c3ad8c39e8ab219b
+ubuntu@worker-2:~$ docker run -dit --name c3 alpine
+74fadf683cad5ebcf0a6c8797b1e61990d9c459644dd2f585fed3a927478ea0f
+ubuntu@worker-2:~$ docker network inspect mynet 
+[
+    {
+        "Name": "mynet",
+        
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+       
+                "IPv4Address": "172.19.0.2/16",
+     
+]
+ubuntu@worker-2:~$ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+     
+                "Name": "c3",
+                
+                "IPv4Address": "172.17.0.2/16",
+  
+ubuntu@worker-2:~$ docker network connect mynet c3
+ubuntu@worker-2:~$ docker network inspect mynet 
+[
+    {
+        "Name": "mynet",
+      
+        "Containers": {
+           
+                "Name": "c2",
+               
+                "IPv4Address": "172.19.0.3/16",
+               
+            },
+          
+                "Name": "c3",
+            
+                "IPv4Address": "172.19.0.4/16",
+
+			
+            },
+           
+                "Name": "c1",
+               
+                "IPv4Address": "172.19.0.2/16",
+    }
+]
+ubuntu@worker-2:~$ docker attach c1
+/ # ping -c 3 google.com
+PING google.com (172.217.13.238): 56 data bytes
+64 bytes from 172.217.13.238: seq=0 ttl=50 time=1.077 ms
+64 bytes from 172.217.13.238: seq=1 ttl=50 time=1.242 ms
+64 bytes from 172.217.13.238: seq=2 ttl=50 time=1.123 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 1.077/1.147/1.242 ms
+/ # ping -c 3 172.19.0.3
+PING 172.19.0.3 (172.19.0.3): 56 data bytes
+64 bytes from 172.19.0.3: seq=0 ttl=64 time=0.109 ms
+64 bytes from 172.19.0.3: seq=1 ttl=64 time=0.084 ms
+64 bytes from 172.19.0.3: seq=2 ttl=64 time=0.106 ms
+
+--- 172.19.0.3 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.084/0.099/0.109 ms
+/ # ping -c 3 172.19.0.4
+PING 172.19.0.4 (172.19.0.4): 56 data bytes
+64 bytes from 172.19.0.4: seq=0 ttl=64 time=0.116 ms
+64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.091 ms
+64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.126 ms
+
+--- 172.19.0.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.091/0.111/0.126 ms
+/ # ping -c 3 172.17.0.2
+PING 172.17.0.2 (172.17.0.2): 56 data bytes
+
+--- 172.17.0.2 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
+/ # ^C
+/ # ping -c 3 c2
+PING c2 (172.19.0.3): 56 data bytes
+64 bytes from 172.19.0.3: seq=0 ttl=64 time=0.101 ms
+64 bytes from 172.19.0.3: seq=1 ttl=64 time=0.081 ms
+64 bytes from 172.19.0.3: seq=2 ttl=64 time=0.095 ms
+
+--- c2 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.081/0.092/0.101 ms
+/ # ping -c 3 c3
+PING c3 (172.19.0.4): 56 data bytes
+64 bytes from 172.19.0.4: seq=0 ttl=64 time=0.064 ms
+64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.083 ms
+64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.081 ms
+
+--- c3 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.064/0.076/0.083 ms
+/ # ping -c 3 c1
+PING c1 (172.19.0.2): 56 data bytes
+64 bytes from 172.19.0.2: seq=0 ttl=64 time=0.032 ms
+64 bytes from 172.19.0.2: seq=1 ttl=64 time=0.063 ms
+64 bytes from 172.19.0.2: seq=2 ttl=64 time=0.058 ms
+
+--- c1 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.032/0.051/0.063 ms
+/ # ping -c 3 172.17.0.
+ping: bad address '172.17.0.'
+/ # 
+/ # read escape sequence
+ubuntu@worker-2:~$ docker run -dit --name c4 alpine
+2911fd7369eb7e299d11a5d0cf1e99f73a0de145e2968ba362f635abd6698f89
+ubuntu@worker-2:~$ docker inspect c4
+
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            
+            "IPAddress": "172.17.0.3",
+            
+ubuntu@worker-2:~$ docker attach c1
+/ # ping -c 3 c4
+ping: bad address 'c4'
+/ # ping -c 3 172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+
+--- 172.17.0.3 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
