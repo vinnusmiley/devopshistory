@@ -140,6 +140,13 @@ docker images
 docker ps
 vi docker-compose.yml [Here we use Volumes concept added in yaml file]
 docker-compose up -d 
-vi app.py [make some modifications] it will efeect on Browser so it is CICD 
+vi app.py [make some modifications] it will efeect on Browser so it is CICD
+
+vi /lib/systemed/system/docker.service
+ExecStart=/usr/bin/dockerd -H fd:// -H unix:// -H tcp://0.0.0.0:2375  --containerd=/run/containerd/containerd.sock
+systemctl daemon-reload
+systemctl restart docker
+sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
+sudo usermod -aG root jenkins
 
 history | cut -c 8- 
