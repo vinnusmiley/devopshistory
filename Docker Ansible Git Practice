@@ -1,0 +1,1977 @@
+
+====================================================	Docker-Pratice	====================================================================
+docker login
+docker run -it myubuntu1 ubuntu
+docker run -it --name myubuntu1 ubuntu
+docker run -it --name myhttpd httpd
+docker run -it --name tomcat1 tomcat:9.0
+docker run -it --name tomcat1 -p 8888:8080 tomcat:9.0
+docker ps
+docker run -it myjenkins jenkins
+docker run -it mynginx nginx
+docker run -it mynginx nginx
+docker ps -a
+docker run -it myubuntu /bin/bash
+docker run -it ubuntu /bin/bash
+docker ps
+docker ps -a
+docker attach dc1c8efd6434
+docker ps
+
+
+
+Running container to Convert as a image
+docker commit -m "creating git maven" -a "vinnu@gmail" dc1c8efd6434 gitmaven:1.0
+
+docker images
+docker ps
+docker ps -a
+docker run -it --name mygitmaven gitmaven:1.0
+docker ps
+docker images
+docker tag gitmaven:1.0 vinnuvikki/gitmaven:2.0 [given tag to container]
+docker images
+docker push vinnuvikki/gitmaven:2.0 [here push to Dockerhub]
+docker exec -it gitmaven:2.0 git --version [here "exec" is used to run a command in a container without logon to it]
+docker ps
+docker exec -it --name g1 
+docker attach dee009913eb9 [is used to simply login to container]
+docker exec -it mygitmaven git --version
+docker exec -it mygitmaven mvn --version
+docker exec -it keen_swirles apt-get update -y
+mkdir demo
+cd demo/
+vim Dockerfile
+docker build -t demo .
+docker images
+docker exec -it demo 
+docker exec -it demo apt-get update
+vim Dockerfile
+docker build -t demo .
+docker ps
+docker images
+docker run -it demo bash
+vim Dockerfile
+docker run -it demo bash
+docker run -it -w /app demo
+docker run -d -p 80:80 httpd
+docker ps
+docker attach f35a756e47cd
+docker run -d -p 80:80 httpd
+docker ps
+docker inspect c0f9a18a6f35 [here see the total data on a container]
+docker run -d -p 8080:80 httpd
+docker ps
+docker inspect 41feeac6a8e4
+curl 172.17.0.10
+pwd
+vi index.html
+docker cp /root/demo/index.html 41feeac6a8e4:/usr/local/apache2/htdocs
+curl 172.17.0.10
+docker stop 41feeac6a8e4
+docker run -d --name mytomcat -p 8080:80 tomcat
+docker images
+docker run -d  -p 8080:80 tomcat
+docker start tomcat 
+docker start tomcat:9.0
+docker run -it tomcat
+docker run -it 81a4731e5497
+
+
+docker run -dit --name my-running-app -p 8080:80 httpd
+docker ps
+docker inspect 7fb583c90a63
+curl 172.17.0.2 [is used to see the browsers  message]
+vi index.html
+cp index.html /usr/local/apche2/htdocs/index.html [here copy files on local machines]
+ls
+docker cp /root/index.html 7fb583c90a63:/usr/local/apache2/htdocs
+curl 172.17.0.2
+docker stop 7fb583c90a63
+docker ps
+docker ps -a
+docker images
+docker run --name my-nginx -d -p 8080:80 nginx
+docker ps
+docker inspect d80a06a03955
+curl 172.17.0.2
+docker cp /root/index.html d80a06a03955:/usr/share/nginx/html
+curl 172.17.0.2
+docker stop d80a06a03955
+docker volume --help
+docker volume
+docker images
+docker ps
+docker ps -aq
+docker stop ebf04c26921(your desire container id)
+docker run -it --name c1 -v /app ubuntu ( -v indicate volume : /app is path here default location)
+dockdocker inspect c1
+docker run -it --name c1 -v app2:/app2 ubuntu
+docker run -it --name c2 -v app2:/app2 ubuntu
+docker ps
+docker stop df446cca3ac8
+docker stop 40cb28625d29 
+docker ps
+docker ps -a
+docker images
+docker run -it --name mycentos centos
+docker run -it --name mywordpress wordpress
+docker images
+docker ps
+docker ps -a
+docker run -it --name v1 -v /home/ubuntu/app1:/app1 ubuntu [source:Dest] [app1 we create as a volume]
+docker run -it --name v2 -v /home/ubuntu/app1:/app1 ubuntu [attach same volume to the new or existing container]
+docker run -it --name v3 -v /home/ubuntu/app1:/app1 vinnuvikki/gitmaven:2.0
+
+
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+mkdir composetest
+cd composetest/
+vi app.py
+vi requirements.txt
+vi Dockerfile
+vi docker-compose.yml
+cat docker-compose.yml
+vi docker-compose.yml
+docker-compose up -d [ docker-compose is a command to run docker multi containers]
+docker images
+docker ps
+vi docker-compose.yml [Here we use Volumes concept added in yaml file]
+docker-compose up -d 
+vi app.py [make some modifications] it will efeect on Browser so it is CICD
+
+vi /lib/systemed/system/docker.service
+ExecStart=/usr/bin/dockerd -H fd:// -H unix:// -H tcp://0.0.0.0:2375  --containerd=/run/containerd/containerd.sock
+systemctl daemon-reload
+systemctl restart docker
+sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
+sudo usermod -aG root jenkins
+
+history | cut -c 8- 
+
+
+
+====================================================	Docker-Network	====================================================================
+
+ubuntu@worker-2:~$ docker run -dit --name c1 alpine
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+cbdbe7a5bc2a: Pull complete 
+Digest: sha256:9a839e63dad54c3a6d1834e29692c8492d93f90c59c978c1ed79109ea4fb9a54
+Status: Downloaded newer image for alpine:latest
+48f2b10ce36be17f0ed34f527b217c005b60c5df132a8fdbdfce7251044792b8
+ubuntu@worker-2:~$ docker run -dit --name c2 alpine
+45d7a25640625960d3e3aed113f9f72616a1551b48b5cdede21df097bd673c20
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+45d7a2564062        alpine              "/bin/sh"           13 seconds ago      Up 11 seconds                           c2
+48f2b10ce36b        alpine              "/bin/sh"           22 seconds ago      Up 20 seconds                           c1
+ubuntu@worker-2:~$ ifconfig
+docker0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+       
+docker_gwbridge: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.18.0.1  netmask 255.255.0.0  broadcast 172.18.255.255
+       
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9001
+        inet 10.1.1.117  netmask 255.255.255.0  broadcast 10.1.1.255
+        
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+     
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+45d7a2564062        alpine              "/bin/sh"           3 minutes ago       Up 3 minutes                            c2
+48f2b10ce36b        alpine              "/bin/sh"           3 minutes ago       Up 3 minutes                            c1
+ubuntu@worker-2:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+455c6e23c18c        bridge              bridge              local
+047ac6fdfdfb        docker_gwbridge     bridge              local
+1e783d0508cc        host                host                local
+6eeb48da3f2d        none                null                local
+ubuntu@worker-2:~$ docker network inspect bridge 
+[
+    {
+        "Name": "bridge",
+        
+        
+        "Containers": {
+            "45d7a25640625960d3e3aed113f9f72616a1551b48b5cdede21df097bd673c20": {
+                "Name": "c2",
+                "IPv4Address": "172.17.0.3/16",
+              
+            },
+            
+                "Name": "c1",         
+                "IPv4Address": "172.17.0.2/16",
+            },  
+        
+ubuntu@worker-2:~$ docker attach c1
+/ # ping -c 3 google.com
+PING google.com (172.217.13.78): 56 data bytes
+64 bytes from 172.217.13.78: seq=0 ttl=50 time=1.062 ms
+64 bytes from 172.217.13.78: seq=1 ttl=50 time=1.125 ms
+64 bytes from 172.217.13.78: seq=2 ttl=50 time=1.126 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 1.062/1.104/1.126 ms
+/ # ping -c 3 c2
+ping: bad address 'c2'
+/ # ping -c 3 172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+64 bytes from 172.17.0.3: seq=0 ttl=64 time=0.087 ms
+64 bytes from 172.17.0.3: seq=1 ttl=64 time=0.081 ms
+64 bytes from 172.17.0.3: seq=2 ttl=64 time=0.089 ms
+
+--- 172.17.0.3 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.081/0.085/0.089 ms
+/ # exit
+ubuntu@worker-2:~$ docker stop c1 c2
+c1
+c2
+ubuntu@worker-2:~$ docker network create mynet --driver bridge
+362a56ef23d34e4d73e95f17c79a4f67b32068c298c966a82b12b0a73a608390
+ubuntu@worker-2:~$ docker network --help
+
+Usage:	docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+ubuntu@worker-2:~$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+455c6e23c18c        bridge              bridge              local
+047ac6fdfdfb        docker_gwbridge     bridge              local
+1e783d0508cc        host                host                local
+362a56ef23d3        mynet               bridge              local
+6eeb48da3f2d        none                null                local
+ubuntu@worker-2:~$ docker run -dit --name c1 --network mynet alpine
+e56976bf64156d7a4eb917365b16ba0b21aa4d2003a82725e51f9b3009e3dc94
+ubuntu@worker-2:~$ docker run -dit --name c2 --network mynet alpine
+201041fc9cc2f5cec5f1f04205e50e64c47fc87e54b7a9c1c3ad8c39e8ab219b
+ubuntu@worker-2:~$ docker run -dit --name c3 alpine
+74fadf683cad5ebcf0a6c8797b1e61990d9c459644dd2f585fed3a927478ea0f
+ubuntu@worker-2:~$ docker network inspect mynet 
+[
+    {
+        "Name": "mynet",
+        
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+       
+                "IPv4Address": "172.19.0.2/16",
+     
+]
+ubuntu@worker-2:~$ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+     
+                "Name": "c3",
+                
+                "IPv4Address": "172.17.0.2/16",
+  
+ubuntu@worker-2:~$ docker network connect mynet c3
+ubuntu@worker-2:~$ docker network inspect mynet 
+[
+    {
+        "Name": "mynet",
+      
+        "Containers": {
+           
+                "Name": "c2",
+               
+                "IPv4Address": "172.19.0.3/16",
+               
+            },
+          
+                "Name": "c3",
+            
+                "IPv4Address": "172.19.0.4/16",
+
+			
+            },
+           
+                "Name": "c1",
+               
+                "IPv4Address": "172.19.0.2/16",
+    }
+]
+ubuntu@worker-2:~$ docker attach c1
+/ # ping -c 3 google.com
+PING google.com (172.217.13.238): 56 data bytes
+64 bytes from 172.217.13.238: seq=0 ttl=50 time=1.077 ms
+64 bytes from 172.217.13.238: seq=1 ttl=50 time=1.242 ms
+64 bytes from 172.217.13.238: seq=2 ttl=50 time=1.123 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 1.077/1.147/1.242 ms
+/ # ping -c 3 172.19.0.3
+PING 172.19.0.3 (172.19.0.3): 56 data bytes
+64 bytes from 172.19.0.3: seq=0 ttl=64 time=0.109 ms
+64 bytes from 172.19.0.3: seq=1 ttl=64 time=0.084 ms
+64 bytes from 172.19.0.3: seq=2 ttl=64 time=0.106 ms
+
+--- 172.19.0.3 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.084/0.099/0.109 ms
+/ # ping -c 3 172.19.0.4
+PING 172.19.0.4 (172.19.0.4): 56 data bytes
+64 bytes from 172.19.0.4: seq=0 ttl=64 time=0.116 ms
+64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.091 ms
+64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.126 ms
+
+--- 172.19.0.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.091/0.111/0.126 ms
+/ # ping -c 3 172.17.0.2
+PING 172.17.0.2 (172.17.0.2): 56 data bytes
+
+--- 172.17.0.2 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
+/ # ^C
+/ # ping -c 3 c2
+PING c2 (172.19.0.3): 56 data bytes
+64 bytes from 172.19.0.3: seq=0 ttl=64 time=0.101 ms
+64 bytes from 172.19.0.3: seq=1 ttl=64 time=0.081 ms
+64 bytes from 172.19.0.3: seq=2 ttl=64 time=0.095 ms
+
+--- c2 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.081/0.092/0.101 ms
+/ # ping -c 3 c3
+PING c3 (172.19.0.4): 56 data bytes
+64 bytes from 172.19.0.4: seq=0 ttl=64 time=0.064 ms
+64 bytes from 172.19.0.4: seq=1 ttl=64 time=0.083 ms
+64 bytes from 172.19.0.4: seq=2 ttl=64 time=0.081 ms
+
+--- c3 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.064/0.076/0.083 ms
+/ # ping -c 3 c1
+PING c1 (172.19.0.2): 56 data bytes
+64 bytes from 172.19.0.2: seq=0 ttl=64 time=0.032 ms
+64 bytes from 172.19.0.2: seq=1 ttl=64 time=0.063 ms
+64 bytes from 172.19.0.2: seq=2 ttl=64 time=0.058 ms
+
+--- c1 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.032/0.051/0.063 ms
+/ # ping -c 3 172.17.0.
+ping: bad address '172.17.0.'
+/ # 
+/ # read escape sequence
+ubuntu@worker-2:~$ docker run -dit --name c4 alpine
+2911fd7369eb7e299d11a5d0cf1e99f73a0de145e2968ba362f635abd6698f89
+ubuntu@worker-2:~$ docker inspect c4
+
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            
+            "IPAddress": "172.17.0.3",
+            
+ubuntu@worker-2:~$ docker attach c1
+/ # ping -c 3 c4
+ping: bad address 'c4'
+/ # ping -c 3 172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+
+--- 172.17.0.3 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
+
+
+====================================================	Docker-Swarm	====================================================================
+ubuntu@manager-1:~$ docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+9uu57havfm1is09411j5m53n1 *   manager-1           Ready               Active              Leader              19.03.6
+m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active                                  19.03.6
+whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
+ubuntu@manager-1:~$ docker node --help
+
+Usage:	docker node COMMAND
+
+Manage Swarm nodes
+
+Commands:
+  demote      Demote one or more nodes from manager in the swarm
+  inspect     Display detailed information on one or more nodes
+  ls          List nodes in the swarm
+  promote     Promote one or more nodes to manager in the swarm
+  ps          List tasks running on one or more nodes, defaults to current node
+  rm          Remove one or more nodes from the swarm
+  update      Update a node
+
+
+ubuntu@manager-1:~$ docker node inspect worker-1
+[
+   
+            "Addr": "10.1.1.179"
+      
+]
+ubuntu@manager-1:~$ docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+9uu57havfm1is09411j5m53n1 *   manager-1           Ready               Active              Leader              19.03.6
+m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active                                  19.03.6
+whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
+ubuntu@manager-1:~$ docker service --help
+
+Manage services
+
+Commands:
+  create      Create a new service
+  inspect     Display detailed information on one or more services
+  logs        Fetch the logs of a service or task
+  ls          List services
+  ps          List the tasks of one or more services
+  rm          Remove one or more services
+  rollback    Revert changes to a service's configuration
+  scale       Scale one or multiple replicated services
+  update      Update a service
+
+Run 'docker service COMMAND --help' for more information on a command.
+ubuntu@manager-1:~$ docker service create --replicas 5 --name myhttpd httpd
+a672h3o3ospf73bifggkq4pgt
+overall progress: 5 out of 5 tasks 
+1/5: running   [==================================================>] 
+2/5: running   [==================================================>] 
+3/5: running   [==================================================>] 
+4/5: running   [==================================================>] 
+5/5: running   [==================================================>] 
+verify: Service converged 
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+a672h3o3ospf        myhttpd             replicated          5/5                 httpd:latest        
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 53 seconds ago                       
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 55 seconds ago                       
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 53 seconds ago                       
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 53 seconds ago                       
+b5ta4laeeq7a        myhttpd.5           httpd:latest        worker-2            Running             Running 53 seconds ago                       
+ubuntu@manager-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+6b80e0e3dec0        httpd:latest        "httpd-foreground"   3 minutes ago       Up 3 minutes        80/tcp              myhttpd.1.qmswcdbx02s6b92xznwxc24vg
+7a095b92fa49        httpd:latest        "httpd-foreground"   3 minutes ago       Up 3 minutes        80/tcp              myhttpd.4.o9szx9iqla4pk5p3lm9nbp90j
+ubuntu@manager-1:~$ docker inspect 6b80e0e3dec0
+[
+    {
+            "Name": "overlay2"
+
+           
+            "IPAddress": "172.17.0.3",
+    
+]
+ubuntu@manager-1:~$ curl 172.17.0.3
+<html><body><h1>It works!</h1></body></html>
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 4 minutes ago                       
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 4 minutes ago                       
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 4 minutes ago                       
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 4 minutes ago                       
+b5ta4laeeq7a        myhttpd.5           httpd:latest        worker-2            Running             Running 4 minutes ago                       
+ubuntu@manager-1:~$ docker service scale myhttpd=8 
+myhttpd scaled to 8
+overall progress: 8 out of 8 tasks 
+1/8: running   [==================================================>] 
+2/8: running   [==================================================>] 
+3/8: running   [==================================================>] 
+4/8: running   [==================================================>] 
+5/8: running   [==================================================>] 
+6/8: running   [==================================================>] 
+7/8: running   [==================================================>] 
+8/8: running   [==================================================>] 
+verify: Service converged 
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 5 minutes ago                        
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 5 minutes ago                        
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 5 minutes ago                        
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 5 minutes ago                        
+b5ta4laeeq7a        myhttpd.5           httpd:latest        worker-2            Running             Running 5 minutes ago                        
+ss6pyvrx0312        myhttpd.6           httpd:latest        worker-1            Running             Running 16 seconds ago                       
+n1etsna11y6k        myhttpd.7           httpd:latest        worker-2            Running             Running 16 seconds ago                       
+cjpchqurw2ds        myhttpd.8           httpd:latest        worker-1            Running             Running 16 seconds ago                       
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+a672h3o3ospf        myhttpd             replicated          8/8                 httpd:latest        
+ubuntu@manager-1:~$ docker service scale myhttpd=4
+myhttpd scaled to 4
+overall progress: 4 out of 4 tasks 
+1/4: running   [==================================================>] 
+2/4: running   [==================================================>] 
+3/4: running   [==================================================>] 
+4/4: running   [==================================================>] 
+verify: Service converged 
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+a672h3o3ospf        myhttpd             replicated          4/4                 httpd:latest        
+ubuntu@manager-1:~$ docker service ps myhttpd 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE           ERROR               PORTS
+qmswcdbx02s6        myhttpd.1           httpd:latest        manager-1           Running             Running 7 minutes ago                       
+awncjzmluemq        myhttpd.2           httpd:latest        worker-1            Running             Running 7 minutes ago                       
+fv9vjiw3eap7        myhttpd.3           httpd:latest        worker-2            Running             Running 7 minutes ago                       
+o9szx9iqla4p        myhttpd.4           httpd:latest        manager-1           Running             Running 7 minutes ago                       
+ubuntu@manager-1:~$ docker service rm myhttpd 
+myhttpd
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+ubuntu@manager-1:~$ 
+ubuntu@manager-1:~$ docker service create \
+>   --replicas 3 \
+>   --name redis \
+>   --update-delay 10s \
+>   redis:3.0.6
+
+overall progress: 3 out of 3 tasks 
+1/3: running   [==================================================>] 
+2/3: running   [==================================================>] 
+3/3: running   [==================================================>] 
+verify: Service converged
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+uflp5u6f4ce0        redis               replicated          3/3                 redis:3.0.6         
+ubuntu@manager-1:~$ 
+ubuntu@manager-1:~$ docker service inspect --pretty redis
+
+ID:		uflp5u6f4ce0lhfy3imu6zodp
+Name:		redis
+Service Mode:	Replicated
+ Replicas:	3
+Placement:
+UpdateConfig:
+ Parallelism:	1
+ Delay:		10s
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Update order:      stop-first
+RollbackConfig:
+ Parallelism:	1
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Rollback order:    stop-first
+ContainerSpec:
+ Image:		redis:3.0.6
+ Init:		false
+Resources:
+Endpoint Mode:	vip
+
+ubuntu@manager-1:~$ docker service inspect --pretty redis
+
+ID:		uflp5u6f4ce0lhfy3imu6zodp
+Name:		redis
+Service Mode:	Replicated
+ Replicas:	3
+UpdateStatus:
+ State:		completed
+ Started:	59 seconds ago
+ Completed:	5 seconds ago
+ Message:	update completed
+Placement:
+UpdateConfig:
+ Parallelism:	1
+ Delay:		10s
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Update order:      stop-first
+RollbackConfig:
+ Parallelism:	1
+ On failure:	pause
+ Monitoring Period: 5s
+ Max failure ratio: 0
+ Rollback order:    stop-first
+ContainerSpec:
+ Image:		redis:3.0.7
+ Init:		false
+Resources:
+Endpoint Mode:	vip
+
+ubuntu@manager-1:~$ docker service ps redis 
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE                ERROR               PORTS
+prpufnnz3x02        redis.1             redis:3.0.7         manager-1           Running             Running about a minute ago                       
+yj6gp7voyrw9         \_ redis.1         redis:3.0.6         manager-1           Shutdown            Shutdown 2 minutes ago                           
+xg7pkiz04390        redis.2             redis:3.0.7         worker-1            Running             Running 2 minutes ago                            
+wj6k0nv7q1q4         \_ redis.2         redis:3.0.6         worker-1            Shutdown            Shutdown 2 minutes ago                           
+lo2pzht9t6ej        redis.3             redis:3.0.7         worker-2            Running             Running 2 minutes ago                            
+vfcorznsj5ii         \_ redis.3         redis:3.0.6         worker-2            Shutdown            Shutdown 2 minutes ago                           
+
+ubuntu@manager-1:~$ vi bb-stack.yaml
+ubuntu@manager-1:~$ cat bb-stack.yaml
+version: '3.7'
+
+services:
+  bb-app:
+    image: bulletinboard:1.0
+    ports:
+      - "8000:8080"
+
+ubuntu@manager-1:~$ docker stack deploy -c bb-stack.yaml demo
+Creating network demo_default
+Creating service demo_bb-app
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                 MODE                REPLICAS            IMAGE               PORTS
+ejv8vt29rqp9        affectionate_payne   replicated          0/1                 3:latest            
+s7z49hmsa70f        demo_bb-app          replicated          0/1                 bulletinboard:1.0   *:8000->8080/tcp
+x9zby6ypjido        reverent_booth       replicated          0/1                 3:latest            
+ubuntu@manager-1:~$ docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+9uu57havfm1is09411j5m53n1 *   manager-1           Ready               Active              Leader              19.03.6
+m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active                                  19.03.6
+whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
+ubuntu@manager-1:~$ docker service logs demo_bb-app 
+ubuntu@manager-1:~$ docker service ls
+ID                  NAME                 MODE                REPLICAS            IMAGE               PORTS
+ejv8vt29rqp9        affectionate_payne   replicated          0/1                 3:latest            
+s7z49hmsa70f        demo_bb-app          replicated          0/1                 bulletinboard:1.0   *:8000->8080/tcp
+x9zby6ypjido        reverent_booth       replicated          0/1                 3:latest            
+ubuntu@manager-1:~$ docker stack rm demo
+Removing service demo_bb-app
+Removing network demo_default
+
+
+
+ubuntu@ip-10-1-1-117:~$ sudo hostnamectl set-hostname worker-1
+ubuntu@ip-10-1-1-117:~$ exit
+
+
+ubuntu@worker-1:~$ docker swarm join --token SWMTKN-1-3vqsfux7zqm62f0vbq02e9op5daa0xdhw50n17rbnavnpqj8na-1kk466msxe9jclmye9ak5tsxs 10.1.1.146:2377
+
+This node joined a swarm as a worker.
+
+ubuntu@worker-1:~$ docker info | grep -i swarm
+ Swarm: active
+WARNING: No swap limit support
+ubuntu@worker-1:~$ docker node ls
+Error response from daemon: This node is not a swarm manager. Worker nodes can't be used to view or modify cluster state. Please run this command on a manager node or promote the current node to a manager.
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS               NAMES
+7db081ffc25e        httpd:latest        "httpd-foreground"   About a minute ago   Up About a minute   80/tcp              myhttpd.7.n1etsna11y6k5nvt7cpi5j8gc
+a033525245dd        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+12b790b7f1ae        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.5.b5ta4laeeq7advchyvcb4oy7z
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+a033525245dd        httpd:latest        "httpd-foreground"   7 minutes ago       Up 7 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ubuntu@worker-1:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+a40e044cbaf6        redis:3.0.7         "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        6379/tcp            redis.3.lo2pzht9t6ej8sd5ae87gcver
+
+
+
+ubuntu@ip-10-1-1-117:~$ sudo hostnamectl set-hostname worker-2
+ubuntu@ip-10-1-1-117:~$ exit
+
+
+ubuntu@worker-2:~$ docker swarm join --token SWMTKN-1-3vqsfux7zqm62f0vbq02e9op5daa0xdhw50n17rbnavnpqj8na-1kk466msxe9jclmye9ak5tsxs 10.1.1.146:2377
+
+This node joined a swarm as a worker.
+
+ubuntu@worker-2:~$ docker info | grep -i swarm
+ Swarm: active
+WARNING: No swap limit support
+ubuntu@worker-2:~$ docker node ls
+Error response from daemon: This node is not a swarm manager. Worker nodes can't be used to view or modify cluster state. Please run this command on a manager node or promote the current node to a manager.
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED              STATUS              PORTS               NAMES
+7db081ffc25e        httpd:latest        "httpd-foreground"   About a minute ago   Up About a minute   80/tcp              myhttpd.7.n1etsna11y6k5nvt7cpi5j8gc
+a033525245dd        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+12b790b7f1ae        httpd:latest        "httpd-foreground"   6 minutes ago        Up 6 minutes        80/tcp              myhttpd.5.b5ta4laeeq7advchyvcb4oy7z
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND              CREATED             STATUS              PORTS               NAMES
+a033525245dd        httpd:latest        "httpd-foreground"   7 minutes ago       Up 7 minutes        80/tcp              myhttpd.3.fv9vjiw3eap7xvh0qyxowyaro
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ubuntu@worker-2:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+a40e044cbaf6        redis:3.0.7         "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        6379/tcp            redis.3.lo2pzht9t6ej8sd5ae87gcver
+
+
+
+
+ubuntu@worker-2:~$ docker swarm leave
+Node left the swarm.
+ubuntu@worker-2:~$ docker info | grep -i swarm
+ Swarm: inactive
+WARNING: No swap limit support
+
+
+====================================================	ANSIBLE ADHOC	====================================================================
+
+18.206.85.87 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.1.1.44"
+        ], 
+        "ansible_all_ipv6_addresses": [
+            "fe80::f4:7aff:fe73:5107"
+        ], 
+        "ansible_apparmor": {
+            "status": "enabled"
+        }, 
+        "ansible_architecture": "x86_64", 
+        "ansible_bios_date": "08/24/2006", 
+        "ansible_bios_version": "4.2.amazon", 
+        "ansible_cmdline": {
+            "BOOT_IMAGE": "/boot/vmlinuz-4.15.0-1065-aws", 
+            "console": "ttyS0", 
+            "nvme_core.io_timeout": "4294967295", 
+            "ro": true, 
+            "root": "LABEL=cloudimg-rootfs"
+        }, 
+        "ansible_date_time": {
+            "date": "2020-04-29", 
+            "day": "29", 
+            "epoch": "1588167588", 
+            "hour": "13", 
+            "iso8601": "2020-04-29T13:39:48Z", 
+            "iso8601_basic": "20200429T133948714907", 
+            "iso8601_basic_short": "20200429T133948", 
+            "iso8601_micro": "2020-04-29T13:39:48.714982Z", 
+            "minute": "39", 
+            "month": "04", 
+            "second": "48", 
+            "time": "13:39:48", 
+            "tz": "UTC", 
+            "tz_offset": "+0000", 
+            "weekday": "Wednesday", 
+            "weekday_number": "3", 
+            "weeknumber": "17", 
+            "year": "2020"
+        }, 
+        "ansible_default_ipv4": {
+            "address": "10.1.1.44", 
+            "alias": "eth0", 
+            "broadcast": "10.1.1.255", 
+            "gateway": "10.1.1.1", 
+            "interface": "eth0", 
+            "macaddress": "02:f4:7a:73:51:07", 
+            "mtu": 9001, 
+            "netmask": "255.255.255.0", 
+            "network": "10.1.1.0", 
+            "type": "ether"
+        }, 
+        "ansible_default_ipv6": {}, 
+        "ansible_device_links": {
+            "ids": {}, 
+            "labels": {
+                "xvda1": [
+                    "cloudimg-rootfs"
+                ]
+            }, 
+            "masters": {}, 
+            "uuids": {
+                "xvda1": [
+                    "6156ec80-9446-4eb1-95e0-9ae6b7a46187"
+                ]
+            }
+        }, 
+        "ansible_devices": {
+            "loop0": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "36832", 
+                "sectorsize": "512", 
+                "size": "17.98 MB", 
+                "support_discard": "4096", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop1": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "192064", 
+                "sectorsize": "512", 
+                "size": "93.78 MB", 
+                "support_discard": "4096", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop2": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "192352", 
+                "sectorsize": "512", 
+                "size": "93.92 MB", 
+                "support_discard": "4096", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop3": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "0", 
+                "sectorsize": "512", 
+                "size": "0.00 Bytes", 
+                "support_discard": "4096", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop4": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "0", 
+                "sectorsize": "512", 
+                "size": "0.00 Bytes", 
+                "support_discard": "0", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop5": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "0", 
+                "sectorsize": "512", 
+                "size": "0.00 Bytes", 
+                "support_discard": "0", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop6": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "0", 
+                "sectorsize": "512", 
+                "size": "0.00 Bytes", 
+                "support_discard": "0", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "loop7": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {}, 
+                "removable": "0", 
+                "rotational": "1", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "none", 
+                "sectors": "0", 
+                "sectorsize": "512", 
+                "size": "0.00 Bytes", 
+                "support_discard": "0", 
+                "vendor": null, 
+                "virtual": 1
+            }, 
+            "xvda": {
+                "holders": [], 
+                "host": "", 
+                "links": {
+                    "ids": [], 
+                    "labels": [], 
+                    "masters": [], 
+                    "uuids": []
+                }, 
+                "model": null, 
+                "partitions": {
+                    "xvda1": {
+                        "holders": [], 
+                        "links": {
+                            "ids": [], 
+                            "labels": [
+                                "cloudimg-rootfs"
+                            ], 
+                            "masters": [], 
+                            "uuids": [
+                                "6156ec80-9446-4eb1-95e0-9ae6b7a46187"
+                            ]
+                        }, 
+                        "sectors": "16775135", 
+                        "sectorsize": 512, 
+                        "size": "8.00 GB", 
+                        "start": "2048", 
+                        "uuid": "6156ec80-9446-4eb1-95e0-9ae6b7a46187"
+                    }
+                }, 
+                "removable": "0", 
+                "rotational": "0", 
+                "sas_address": null, 
+                "sas_device_handle": null, 
+                "scheduler_mode": "cfq", 
+                "sectors": "16777216", 
+                "sectorsize": "512", 
+                "size": "8.00 GB", 
+                "support_discard": "0", 
+                "vendor": null, 
+                "virtual": 1
+            }
+        }, 
+        "ansible_distribution": "Ubuntu", 
+        "ansible_distribution_file_parsed": true, 
+        "ansible_distribution_file_path": "/etc/os-release", 
+        "ansible_distribution_file_variety": "Debian", 
+        "ansible_distribution_major_version": "18", 
+        "ansible_distribution_release": "bionic", 
+        "ansible_distribution_version": "18.04", 
+        "ansible_dns": {
+            "nameservers": [
+                "127.0.0.53"
+            ], 
+            "options": {
+                "edns0": true
+            }, 
+            "search": [
+                "ec2.internal"
+            ]
+        }, 
+        "ansible_domain": "ec2.internal", 
+        "ansible_effective_group_id": 1001, 
+        "ansible_effective_user_id": 1001, 
+        "ansible_env": {
+            "HOME": "/home/ansible", 
+            "LANG": "C.UTF-8", 
+            "LOGNAME": "ansible", 
+            "MAIL": "/var/mail/ansible", 
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games", 
+            "PWD": "/home/ansible", 
+            "SHELL": "/bin/bash", 
+            "SHLVL": "1", 
+            "SSH_CLIENT": "59.93.122.190 10250 22", 
+            "SSH_CONNECTION": "59.93.122.190 10250 10.1.1.44 22", 
+            "SSH_TTY": "/dev/pts/0", 
+            "TERM": "xterm-256color", 
+            "USER": "ansible", 
+            "XDG_RUNTIME_DIR": "/run/user/1001", 
+            "XDG_SESSION_ID": "31", 
+            "_": "/bin/sh"
+        }, 
+        "ansible_eth0": {
+            "active": true, 
+            "device": "eth0", 
+            "features": {
+                "esp_hw_offload": "off [fixed]", 
+                "esp_tx_csum_hw_offload": "off [fixed]", 
+                "fcoe_mtu": "off [fixed]", 
+                "generic_receive_offload": "on", 
+                "generic_segmentation_offload": "on", 
+                "highdma": "off [fixed]", 
+                "hw_tc_offload": "off [fixed]", 
+                "l2_fwd_offload": "off [fixed]", 
+                "large_receive_offload": "off [fixed]", 
+                "loopback": "off [fixed]", 
+                "netns_local": "off [fixed]", 
+                "ntuple_filters": "off [fixed]", 
+                "receive_hashing": "off [fixed]", 
+                "rx_all": "off [fixed]", 
+                "rx_checksumming": "on [fixed]", 
+                "rx_fcs": "off [fixed]", 
+                "rx_udp_tunnel_port_offload": "off [fixed]", 
+                "rx_vlan_filter": "off [fixed]", 
+                "rx_vlan_offload": "off [fixed]", 
+                "rx_vlan_stag_filter": "off [fixed]", 
+                "rx_vlan_stag_hw_parse": "off [fixed]", 
+                "scatter_gather": "on", 
+                "tcp_segmentation_offload": "on", 
+                "tx_checksum_fcoe_crc": "off [fixed]", 
+                "tx_checksum_ip_generic": "off [fixed]", 
+                "tx_checksum_ipv4": "on [fixed]", 
+                "tx_checksum_ipv6": "on", 
+                "tx_checksum_sctp": "off [fixed]", 
+                "tx_checksumming": "on", 
+                "tx_esp_segmentation": "off [fixed]", 
+                "tx_fcoe_segmentation": "off [fixed]", 
+                "tx_gre_csum_segmentation": "off [fixed]", 
+                "tx_gre_segmentation": "off [fixed]", 
+                "tx_gso_partial": "off [fixed]", 
+                "tx_gso_robust": "on [fixed]", 
+                "tx_ipxip4_segmentation": "off [fixed]", 
+                "tx_ipxip6_segmentation": "off [fixed]", 
+                "tx_lockless": "off [fixed]", 
+                "tx_nocache_copy": "off", 
+                "tx_scatter_gather": "on", 
+                "tx_scatter_gather_fraglist": "off [fixed]", 
+                "tx_sctp_segmentation": "off [fixed]", 
+                "tx_tcp6_segmentation": "on", 
+                "tx_tcp_ecn_segmentation": "off [fixed]", 
+                "tx_tcp_mangleid_segmentation": "off", 
+                "tx_tcp_segmentation": "on", 
+                "tx_udp_tnl_csum_segmentation": "off [fixed]", 
+                "tx_udp_tnl_segmentation": "off [fixed]", 
+                "tx_vlan_offload": "off [fixed]", 
+                "tx_vlan_stag_hw_insert": "off [fixed]", 
+                "udp_fragmentation_offload": "off", 
+                "vlan_challenged": "off [fixed]"
+            }, 
+            "hw_timestamp_filters": [], 
+            "ipv4": {
+                "address": "10.1.1.44", 
+                "broadcast": "10.1.1.255", 
+                "netmask": "255.255.255.0", 
+                "network": "10.1.1.0"
+            }, 
+            "ipv6": [
+                {
+                    "address": "fe80::f4:7aff:fe73:5107", 
+                    "prefix": "64", 
+                    "scope": "link"
+                }
+            ], 
+            "macaddress": "02:f4:7a:73:51:07", 
+            "module": "xen_netfront", 
+            "mtu": 9001, 
+            "pciid": "vif-0", 
+            "promisc": false, 
+            "timestamping": [
+                "rx_software", 
+                "software"
+            ], 
+            "type": "ether"
+        }, 
+        "ansible_fibre_channel_wwn": [], 
+        "ansible_fips": false, 
+        "ansible_form_factor": "Other", 
+        "ansible_fqdn": "ip-10-1-1-44.ec2.internal", 
+        "ansible_hostname": "node22", 
+        "ansible_hostnqn": "", 
+        "ansible_interfaces": [
+            "lo", 
+            "eth0"
+        ], 
+        "ansible_is_chroot": false, 
+        "ansible_iscsi_iqn": "", 
+        "ansible_kernel": "4.15.0-1065-aws", 
+        "ansible_kernel_version": "#69-Ubuntu SMP Thu Mar 26 02:17:29 UTC 2020", 
+        "ansible_lo": {
+            "active": true, 
+            "device": "lo", 
+            "features": {
+                "esp_hw_offload": "off [fixed]", 
+                "esp_tx_csum_hw_offload": "off [fixed]", 
+                "fcoe_mtu": "off [fixed]", 
+                "generic_receive_offload": "on", 
+                "generic_segmentation_offload": "on", 
+                "highdma": "on [fixed]", 
+                "hw_tc_offload": "off [fixed]", 
+                "l2_fwd_offload": "off [fixed]", 
+                "large_receive_offload": "off [fixed]", 
+                "loopback": "on [fixed]", 
+                "netns_local": "on [fixed]", 
+                "ntuple_filters": "off [fixed]", 
+                "receive_hashing": "off [fixed]", 
+                "rx_all": "off [fixed]", 
+                "rx_checksumming": "on [fixed]", 
+                "rx_fcs": "off [fixed]", 
+                "rx_udp_tunnel_port_offload": "off [fixed]", 
+                "rx_vlan_filter": "off [fixed]", 
+                "rx_vlan_offload": "off [fixed]", 
+                "rx_vlan_stag_filter": "off [fixed]", 
+                "rx_vlan_stag_hw_parse": "off [fixed]", 
+                "scatter_gather": "on", 
+                "tcp_segmentation_offload": "on", 
+                "tx_checksum_fcoe_crc": "off [fixed]", 
+                "tx_checksum_ip_generic": "on [fixed]", 
+                "tx_checksum_ipv4": "off [fixed]", 
+                "tx_checksum_ipv6": "off [fixed]", 
+                "tx_checksum_sctp": "on [fixed]", 
+                "tx_checksumming": "on", 
+                "tx_esp_segmentation": "off [fixed]", 
+                "tx_fcoe_segmentation": "off [fixed]", 
+                "tx_gre_csum_segmentation": "off [fixed]", 
+                "tx_gre_segmentation": "off [fixed]", 
+                "tx_gso_partial": "off [fixed]", 
+                "tx_gso_robust": "off [fixed]", 
+                "tx_ipxip4_segmentation": "off [fixed]", 
+                "tx_ipxip6_segmentation": "off [fixed]", 
+                "tx_lockless": "on [fixed]", 
+                "tx_nocache_copy": "off [fixed]", 
+                "tx_scatter_gather": "on [fixed]", 
+                "tx_scatter_gather_fraglist": "on [fixed]", 
+                "tx_sctp_segmentation": "on", 
+                "tx_tcp6_segmentation": "on", 
+                "tx_tcp_ecn_segmentation": "on", 
+                "tx_tcp_mangleid_segmentation": "on", 
+                "tx_tcp_segmentation": "on", 
+                "tx_udp_tnl_csum_segmentation": "off [fixed]", 
+                "tx_udp_tnl_segmentation": "off [fixed]", 
+                "tx_vlan_offload": "off [fixed]", 
+                "tx_vlan_stag_hw_insert": "off [fixed]", 
+                "udp_fragmentation_offload": "off", 
+                "vlan_challenged": "on [fixed]"
+            }, 
+            "hw_timestamp_filters": [], 
+            "ipv4": {
+                "address": "127.0.0.1", 
+                "broadcast": "host", 
+                "netmask": "255.0.0.0", 
+                "network": "127.0.0.0"
+            }, 
+            "ipv6": [
+                {
+                    "address": "::1", 
+                    "prefix": "128", 
+                    "scope": "host"
+                }
+            ], 
+            "mtu": 65536, 
+            "promisc": false, 
+            "timestamping": [
+                "tx_software", 
+                "rx_software", 
+                "software"
+            ], 
+            "type": "loopback"
+        }, 
+        "ansible_local": {}, 
+        "ansible_lsb": {
+            "codename": "bionic", 
+            "description": "Ubuntu 18.04.4 LTS", 
+            "id": "Ubuntu", 
+            "major_release": "18", 
+            "release": "18.04"
+        }, 
+        "ansible_machine": "x86_64", 
+        "ansible_machine_id": "684831a0083242818d5ac28267851239", 
+        "ansible_memfree_mb": 156, 
+        "ansible_memory_mb": {
+            "nocache": {
+                "free": 824, 
+                "used": 159
+            }, 
+            "real": {
+                "free": 156, 
+                "total": 983, 
+                "used": 827
+            }, 
+            "swap": {
+                "cached": 0, 
+                "free": 0, 
+                "total": 0, 
+                "used": 0
+            }
+        }, 
+        "ansible_memtotal_mb": 983, 
+        "ansible_mounts": [
+            {
+                "block_available": 0, 
+                "block_size": 131072, 
+                "block_total": 751, 
+                "block_used": 751, 
+                "device": "/dev/loop1", 
+                "fstype": "squashfs", 
+                "inode_available": 0, 
+                "inode_total": 12852, 
+                "inode_used": 12852, 
+                "mount": "/snap/core/8935", 
+                "options": "ro,nodev,relatime", 
+                "size_available": 0, 
+                "size_total": 98435072, 
+                "uuid": "N/A"
+            }, 
+            {
+                "block_available": 0, 
+                "block_size": 131072, 
+                "block_total": 144, 
+                "block_used": 144, 
+                "device": "/dev/loop0", 
+                "fstype": "squashfs", 
+                "inode_available": 0, 
+                "inode_total": 15, 
+                "inode_used": 15, 
+                "mount": "/snap/amazon-ssm-agent/1566", 
+                "options": "ro,nodev,relatime", 
+                "size_available": 0, 
+                "size_total": 18874368, 
+                "uuid": "N/A"
+            }, 
+            {
+                "block_available": 0, 
+                "block_size": 131072, 
+                "block_total": 752, 
+                "block_used": 752, 
+                "device": "/dev/loop2", 
+                "fstype": "squashfs", 
+                "inode_available": 0, 
+                "inode_total": 12857, 
+                "inode_used": 12857, 
+                "mount": "/snap/core/9066", 
+                "options": "ro,nodev,relatime", 
+                "size_available": 0, 
+                "size_total": 98566144, 
+                "uuid": "N/A"
+            }, 
+            {
+                "block_available": 1656076, 
+                "block_size": 4096, 
+                "block_total": 2016361, 
+                "block_used": 360285, 
+                "device": "/dev/xvda1", 
+                "fstype": "ext4", 
+                "inode_available": 957245, 
+                "inode_total": 1024000, 
+                "inode_used": 66755, 
+                "mount": "/", 
+                "options": "rw,relatime,discard,data=ordered", 
+                "size_available": 6783287296, 
+                "size_total": 8259014656, 
+                "uuid": "6156ec80-9446-4eb1-95e0-9ae6b7a46187"
+            }
+        ], 
+        "ansible_nodename": "node22", 
+        "ansible_os_family": "Debian", 
+        "ansible_pkg_mgr": "apt", 
+        "ansible_proc_cmdline": {
+            "BOOT_IMAGE": "/boot/vmlinuz-4.15.0-1065-aws", 
+            "console": [
+                "tty1", 
+                "ttyS0"
+            ], 
+            "nvme_core.io_timeout": "4294967295", 
+            "ro": true, 
+            "root": "LABEL=cloudimg-rootfs"
+        }, 
+        "ansible_processor": [
+            "0", 
+            "GenuineIntel", 
+            "Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz"
+        ], 
+        "ansible_processor_cores": 1, 
+        "ansible_processor_count": 1, 
+        "ansible_processor_threads_per_core": 1, 
+        "ansible_processor_vcpus": 1, 
+        "ansible_product_name": "HVM domU", 
+        "ansible_product_serial": "NA", 
+        "ansible_product_uuid": "NA", 
+        "ansible_product_version": "4.2.amazon", 
+        "ansible_python": {
+            "executable": "/usr/bin/python", 
+            "has_sslcontext": true, 
+            "type": "CPython", 
+            "version": {
+                "major": 2, 
+                "micro": 17, 
+                "minor": 7, 
+                "releaselevel": "final", 
+                "serial": 0
+            }, 
+            "version_info": [
+                2, 
+                7, 
+                17, 
+                "final", 
+                0
+            ]
+        }, 
+        "ansible_python_version": "2.7.17", 
+        "ansible_real_group_id": 1001, 
+        "ansible_real_user_id": 1001, 
+        "ansible_selinux": {
+            "status": "Missing selinux Python library"
+        }, 
+        "ansible_selinux_python_present": false, 
+        "ansible_service_mgr": "systemd", 
+        "ansible_ssh_host_key_dsa_public": "AAAAB3NzaC1kc3MAAACBAOVGJrU01hDWWdKpaGDqG54zGVghEYPHD8uaEBRGIuR3IvRo0ClUXsWW7N9pj760GyI5XaTMxa/v+w8q1316tMvHDMdiqmKB9dwQc1Qxp3ZKXahD2lGs83q2akAV77uG0ToRkAyowYtXRVl1GwkQtjvM1bHSlahVYD065o7q4e//AAAAFQD4U0NdaTxbMI4chKoq4bNw5+KZJwAAAIBY0BjHDrKCuHASzP21LD05yhy3Qb63jARoGSuN0agXVP5VdZ/llIoZhjGbdKDZjpdYaH75nP5IiSXisNcgHqX8XlS4C2VjfCq2bDk12sUCYJTAPsz+NAPvXRWdOcpXowHrxafKMdyNwUhbLOUV+fekOHp/jXkKmRZCHajHFuzxXgAAAIAZqQ8gOdYbPxrpjdNeu+P5dYHsm9jhyBIMNOQIx7uAucFH7busMAImAeZdiXtPOxj8NUTuxBdqK70946B7+exwhtLJ9GoXQZCM6I3pB99dZTTrBgURne3rBs5wgP2wnunV1OLOcYleDeA3YXPgE1fEncu7GQshJbeuZ7gBaJO78g==", 
+        "ansible_ssh_host_key_ecdsa_public": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIiHBH0LJYKr5YdTsAyvE4mJSPssO+zLJhI6XbssSYEIbqeySbsqQSMn8oxxaYx8CRwA/uFBoh3kILL8+itOEsw=", 
+        "ansible_ssh_host_key_ed25519_public": "AAAAC3NzaC1lZDI1NTE5AAAAIN37gDKg7P7+DmJYR+hcJY9/yp2jcg36XEsWsrHJG8bU", 
+        "ansible_ssh_host_key_rsa_public": "AAAAB3NzaC1yc2EAAAADAQABAAABAQDqL3lMmGzVD109CKCMZ6yrE72kJFDoFCJn837onpMHuIq3zFSYVp8xf3RnjGb/ZENXhjbrEP0niS6mfSp+lBAOSHpWfwFnLeLtikc6y6vJglOL20YUelU3520kvIdi9j+cnrCdPuXKvvy4Cw+ya64Qj0mxn8XTRKPTFjSyKEiceOA0sc6osusIdGsvIQ8N/EP4twWOi75NKSaOoiaf0Fk/rVN5pm2A3iaf28l8DhyRGdZav1gnIdbOPW/LX5glVvWtJihoUX2kJMFR5znOkqYfTNoFxLac7lT51BXH1QrsjFSWK95uzlGBbySC9dwbl7oBdNslp6sf/HddMblyrl15", 
+        "ansible_swapfree_mb": 0, 
+        "ansible_swaptotal_mb": 0, 
+        "ansible_system": "Linux", 
+        "ansible_system_capabilities": [
+            ""
+        ], 
+        "ansible_system_capabilities_enforced": "True", 
+        "ansible_system_vendor": "Xen", 
+        "ansible_uptime_seconds": 6683, 
+        "ansible_user_dir": "/home/ansible", 
+        "ansible_user_gecos": ",,,", 
+        "ansible_user_gid": 1001, 
+        "ansible_user_id": "ansible", 
+        "ansible_user_shell": "/bin/bash", 
+        "ansible_user_uid": 1001, 
+        "ansible_userspace_architecture": "x86_64", 
+        "ansible_userspace_bits": "64", 
+        "ansible_virtualization_role": "guest", 
+        "ansible_virtualization_type": "xen", 
+        "discovered_interpreter_python": "/usr/bin/python", 
+        "gather_subset": [
+            "all"
+        ], 
+        "module_setup": true
+    }, 
+    "changed": false
+}
+
+ansible@christy:~$ ansible all -m setup -a "filter=*ipv4*"
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host 3.219.218.68 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior 
+Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+3.219.218.68 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.1.1.134"
+        ], 
+        "ansible_default_ipv4": {
+            "address": "10.1.1.134", 
+            "alias": "eth0", 
+            "broadcast": "10.1.1.255", 
+            "gateway": "10.1.1.1", 
+            "interface": "eth0", 
+            "macaddress": "02:a7:26:3a:01:ad", 
+            "mtu": 9001, 
+            "netmask": "255.255.255.0", 
+            "network": "10.1.1.0", 
+            "type": "ether"
+        }, 
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false
+}
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host 18.206.85.87 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior 
+Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+18.206.85.87 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.1.1.44"
+        ], 
+        "ansible_default_ipv4": {
+            "address": "10.1.1.44", 
+            "alias": "eth0", 
+            "broadcast": "10.1.1.255", 
+            "gateway": "10.1.1.1", 
+            "interface": "eth0", 
+            "macaddress": "02:f4:7a:73:51:07", 
+            "mtu": 9001, 
+            "netmask": "255.255.255.0", 
+            "network": "10.1.1.0", 
+            "type": "ether"
+        }, 
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false
+}
+ansible@christy:~$ ansible all -m setup -a "filter=ansible_os_family"
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host 3.219.218.68 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior 
+Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+3.219.218.68 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_os_family": "Debian", 
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false
+}
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host 18.206.85.87 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior 
+Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+18.206.85.87 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_os_family": "Debian", 
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false
+}
+ansible@christy:~$ ansible all -m setup -a "filter=ansible_distribution"
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host 3.219.218.68 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior 
+Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+3.219.218.68 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_distribution": "Ubuntu", 
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false
+}
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host 18.206.85.87 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior 
+Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See 
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+18.206.85.87 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_distribution": "Ubuntu", 
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false
+}
+
+====================================================	GITPRACTICE HISTORY	====================================================================
+
+git config --global user.email "vinodxavier19@gmail.com"
+git config --global user.name "vinnu"
+
+git init gitprac
+ls -a
+cd gitprac/
+ls -a
+cd .git/
+
+ls -a .git
+git status
+touch file1 file2
+git status
+git add file1
+git status
+git add .
+git status
+git commit -m "intital commit"
+git log --oneline
+git log
+git show ccd488fae(id)
+touch file3
+git add file3
+git commit -m "file3"
+git log --oneline -1
+git log --oneline --grep "file"
+ls -a .git
+mkdir gitrepo
+cd gitrepo/
+git init --bare remote.git
+cd remote.git/
+ls -a
+cd ..
+git clone remote.git/ wsp1
+cd wsp1/
+ls -a
+touch a
+git add a
+git commit -m "a"
+git status
+touch b
+git add b
+git commit -m "b"
+touch c
+git add c
+git commit -m "c"
+git status
+git log --oneline
+git push
+cd ..
+git clone remote.git/ wsp2
+ls
+cd wsp2
+ls -a
+git log --oneline
+touch d
+git add d
+git commit -m "d"
+git push
+cd ..
+cd wsp1
+git pull
+git clone https://github.com/vinnusmiley/gitrepo25.git
+cd gitrepo25/
+ls
+touch a
+git add a
+git commit -m "a"
+touch b
+git add b
+git commit -m "b"
+git push
+vi sample.java
+git status
+ls
+vi sam.mp4
+ls
+git status
+vi .gitignore
+cat .gitignore 
+git status 
+git stash -a
+cat .gitignore 
+git show 54788d6 b
+cd ..
+ls
+git clone central.git wsp1
+cd ..
+ls
+cd gitrepo/
+git pull
+ls
+gitrepo25/
+git pull
+ls
+cd gitrepo25/
+ls
+git pull
+git push
+ls
+git branch
+git branch test
+git branch
+git checkout test 
+git branch
+ls
+touch d
+git add . && git commit -m "d"
+git checkout
+ls
+git branch
+git checkout master
+git branch
+git config --global user.email "vinodxavier19@gmail.com"
+git config --global user.name "vinnu"
+git branch
+git checkout master
+git branch
+ls
+git merge test master
+ls
+git log --oneline
+git checkout test 
+git log --oneline
+git checkout master
+git checkout -b win
+ls
+git status
+touch n
+touch o
+touch p
+git add n
+git add o
+git add p
+git commit -m "n"
+git commit -m "o"
+ls
+git reflog
+git rebase -i HEAD~3
+git rebase -i HEAD~5
+git rebase -i HEAD~6
+git rebase -i HEAD~8
+git rebase -i HEAD~7
+git log --oneline
+git show 6defaef
+git show 6eee47a 
+ls
+git checkout test
+touch u
+touch v
+ls
+git checkout master 
+git checkout test
+git log --oneline
+git checkout master
+git checkout test
+ls -a
+git status
+git add u
+git commit -m "u"
+git log --oneline
+git checkout master
+git cherry-pick f87e64d
+ls
+git checkout test
+ls
+git add v
+git commit -m "v"
+ls
+git master
+git branch
+git branch master
+git checkout master
+ls
+git reflog 
+git cherry-pick 563fd8a 
+ls
+exit
+cd Music/
+ls
+cd git
+ls
+cd gitrepo/
+ls
+mkdir central.git
+cd central.git/
+git init --bare
+git status
+git branch
+cd ..
+ls
+git clone central.git/ wsp3
+cd wsp3
+ls
+ls -a
+git add a
+git add v
+ls -a
+git log --oneline
+touch a
+git add a
+git commit -m "a"
+touch b
+git add b && git commit -m "a"
+git log --oneline
+git checkout -b test
+touch c 
+git add c && git commit -m "c"
+touch d
+git add d && git commit -m "d"
+git checkout master
+touch e
+git add e && git commit -m "e"
+touch f
+git add f && git commit -m "f"
+git rebase master
+git branch
+git branch test 
+git checkout test
+ls
+git rebase master
+git merge master
+ls
+git merge test
+cd ..
+ls
+ls -a central.git/
+cd central.git/
+ls
+cd branches/
+ls
+cd ..
+ls
+git clone central.git/ wsp4
+cd wsp4
+ls
+cd ..
+cd wsp3
+ls
+git push
+cd ..
+ls
+cd ..
+ls
+cd gitprac/
+ls
+git clone https://github.com/vinnusmiley/gitrepo25.git
+cd gitrepo25/
+ls
+git add sample
+touch sample
+vi sample 
+git add sample && git commit -m "sample"
+ls
+cat sample 
+git checkout -b test
+ls
+touch sample1
+git add sample1 && git commit -m "sample1"
+git checkout master
+ls
+git merge test master
+ls
+git push
+ls
+git checkout master
+git checkout test
+ls
+git checkout master
+git push all
+eval $(ssh-agent -s)
+git clone https://github.com/vinnusmiley/repo50.git
+ls
+cd repo50/
+ls
+cat 1.yml 
+git branch
+git checkout -b test
+ls
+echo a
+touch sample 
+git add sample && git commit -m "sample"
+git rebase master
+ls
+git checkout master
+ls
+git merge test master
+ls
+git push
+git push all
+cd ..
+ls
+git remote set-url origin git@https://github.com/vinnusmiley/repo50.git
+git remote set-url origin git@https://github.com/vinnusmiley/repo50
+git pull
+ls
+cat File1.yaml 
+touch f1
+git add .
+git commit -m "a"
+touch f2
+git add .
+git commit -m "b"
+touch f3
+git add .
+git commit -m "c"
+git log --oneline
+cat>f3
+cat f3
+git status
+git add .
+git commit --amend -m "c"
+git log --oneline
+git reflog
+git tag -a release -m "1"
+git log --oneline
+git tag -a plan -m "1.1" cf410d5
+git log --oneline
+git tag -d plan
+git log --oneline
+git push --tags
+git push origin:release
+git push origin :release
+git fetch
+ls
+git log --oneline
+git pull
+git log --oneline
+touch v1
+git add .
+git stash
+git stash list
+git status
+git stash apply
+git status
+git commit -m "stash"
+git log --oneline
+git stash list
+git stash pop
+git stash list
+touch file7
+git add .
+git stash
+git stash list
+git stash pop
+git stash list
+git commit -m "stashpop"
+ls
+git branch
+git checkout master
+git merge test master
+git push all
+git push -u origin --all
+git pull
+ls
+git branch test
+git checkout test
+git pull
+ls
+cat File1.yaml 
+touch f1
+git add .
+git commit -m "a"
+touch f2
+git add .
+git commit -m "b"
+touch f3
+git add .
+git commit -m "c"
+git log --oneline
+cat>f3
+cat f3
+git status
+git add .
+git commit --amend -m "c"
+git log --oneline
+git reflog
+git tag -a release -m "1"
+git log --oneline
+git tag -a plan -m "1.1" cf410d5
+git log --oneline
+git tag -d plan
+git log --oneline
+git push --tags
+git push origin:release
+git push origin :release
+git fetch
+ls
+git log --oneline
+git pull
+git log --oneline
+touch v1
+git add .
+git stash
+git stash list
+git status
+git stash apply
+git status
+git commit -m "stash"
+git log --oneline
+git stash list
+git stash pop
+git stash list
+touch file7
+git add .
+git stash
+git stash list
+git stash pop
+git stash list
+git commit -m "stashpop"
+git stash -u (it will take working area and staging area as well MEANS "Un Tracked and Changes to be Commited ")
+git store --staged filename
+git status
+ls
+git branch
+git checkout master
+git merge test master
+git push
+Undoing change (Before commit)
+reset     <
+ git reset--soft      1.soft It will reflect on Repositry
+ git reset-- mixed    2.mixed It will reflect on Repositry and Staging Area
+ git reset-- hard     3.hard It will reflect on Repositry and Staging Area and Working directory also
+           >
+           
+git reset 
+After commit
+revert
+git revert id    <
+                  >
+touch list1
+git add .
+git list2
+touch list2
+git stash -u
+git status
+git log --oneline
+git stash list
+vi file2
+git add file2
+git commit -m "file2"
+cat file2
+vi file2
+git add file2
+git status
+git restore --staged file2
+git restore -- staged file2
+git restore --staged file2
+git --help
+git revert file2
+git status
+git log --oneline
+git revert b8869d6
+git reset --hard b8869d6
+ls
+cat file2
+git log --oneline
+git commit -m "file2"
+git revert b8869d6
+ls
+git log --oneline
+
+
