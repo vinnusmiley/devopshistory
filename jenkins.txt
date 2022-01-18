@@ -1,0 +1,329 @@
+	 jenkins plugins
+	 
+		 1 install sugessted plugins
+		 2 selected plugins to install
+		 3 required plugins (*close the window)
+	 
+	 jenkins path :   /var/lib/jenkins/workspace 
+	 
+	 111 job senario
+	 
+	 create a job for shell command thruogh free style project
+	 
+	 222 JOB SENARIO: create free style job dowenloding git 
+
+	 manage jenkins-- global toll configreation--git Defaualt
+	 
+	{ (for add credentials
+	 wide authntication )
+	 
+	 docker host certification authntication } 
+	 
+	 git dowenlods 
+	 
+	 333 SENARIO create a job it has to be happen evrey 2 mins
+	  
+		  build triggers --- build periodically 
+		  
+						* * * * *
+					  *miniut *hour *day of mounth *mounth *day of 	the week(0 to 7 where 0 and 7 are sunday)  
+
+	miniut: miniut with in the hour 0-59
+	hour :the hour of the day 0-23
+	date: 0-31
+	month: the month 1-12
+	dow :day of 	the week(0 to 7 where 0 and 7 are sunday)
+
+
+	444 senario POLL SCM OPTION 	
+
+		 build tiggers -- poll scm
+		   
+		shedule 
+				*/2 * * * *
+		
+	555 build tiggers git hub hooks: tiggers when ever change in git hub then immeditly automatically  build
+
+
+		github hook trigger for gitscm polling select 
+
+		go to git hub and select webhooks and give payload url give jenkins url (http://3.83.175.181:8080/github-webhook/)
+		
+		
+		why CI:  (BATA) build automation	test automation. 
+		
+		 
+		   {    this command shows java bin path}
+		   
+		   
+	BUILD PROCEESS: USING APACHE MAVEN
+
+	MAVEN: maven is build automation tool
+
+
+	manage jenkins-- global tool configreation---- add jdk --	JAVA_HOME-- /usr/local/src/apache-maven
+
+
+
+	build--- invoke top-level maven targets
+
+			 maven version : 	M2_HOME
+			 goals: pacakege
+
+			  MAVEN
+			  
+	maven is build automation tool
+			  
+	pom.xml:   heart of the maven pom stands project object modeal 
+
+	xml: 
+	what are the tags in pom.xml
+
+	tags 1st tag project </project>
+
+	maven goals 
+
+	1.mvn validate 
+
+	2.initialize
+	genrate-sourcses
+	process sourcses
+	genrate resources
+	process-resources
+
+	3.compile
+
+	process-classes
+
+	genrate-test-sources
+	process-test-sourcses
+
+	genrate-test-resources
+	prosess-test-resources
+
+	 test-compile
+
+	process-test-sources
+
+	test
+
+	preapre-package
+
+	pacakege
+
+	pre-integration-test
+	  integreation-test
+	post-integration-test
+
+	verify
+	install
+
+	deploye
+
+	special commands
+
+	pre-clean, clean post, clean, pre-site, site, post-site,  site-deploye
+	 
+
+		   
+	.M2 FOLDER IS A LOCAL MAVEN REPOSITERY
+
+	MAVEN OBJECTS:	   
+
+	making build process eaesy
+
+
+	 Maven Phases
+	 
+	Although hardly a comprehensive list, these are the most common default lifecycle phases executed.
+
+	validate: validate the project is correct and all necessary information is available
+
+	compile: compile the source code of the project
+
+	test: test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
+
+	package: take the compiled code and package it in its distributable format, such as a JAR.
+
+	integration-test: process and deploy the package if necessary into an environment where integration tests can be run
+
+	verify: run any checks to verify the package is valid and meets quality criteria
+
+	install: install the package into the local repository, for use as a dependency in other projects locally
+
+	deploy: done in an integration or release environment, copies the final package to the remote repository for sharing with other developers and projects.
+		  
+		  
+
+	when u do package war file in target
+
+
+	maven 
+
+
+
+		   
+			
+	---------------------------------------------------------------------------------------------------------------	
+		
+	install tomcat
+
+	take any servier install tomcat : this is testing server	
+
+	post build action
+
+	deploy to conatiner plugins you need to install any container jboss 
+
+
+	war file:   **/*.war
+
+	context path: qaenv or homepage
+
+
+	cd /etc/tomcat8 
+	vi server.xml we have tomcat portno if changes done here 
+
+	vi tomcat-users.xml
+	<user username="tomcat" passsword=
+
+	TESTING JOB
+
+	#java -cp testing.jar 
+	---------
+	devjob 
+	tsetjob
+	prodocution job
+
+	how to link one job to anathoer job
+
+
+	build trigger-- build after another projects are built
+
+	nexus repository jfrogg and nexus artifatrey mangers
+
+
+	create users 
+
+
+	jenkins---managejenkins ---manageusers
+
+
+	confger global sequrity
+		   --- enabel sequrity        
+	#matrix based sequrity
+
+
+	in real time rbac (roall based authorization) concepts use for sequrity	
+
+	roall based authorization plugin install	
+	confger global sequrity
+		   --- enabel sequrity -- select rabc
+
+			  select manage rolles
+
+	project roles 		  
+		developer: dev.*
+		prodocution
+		tester	 
+		
+		-------------------------------------------------------------------------------------------------------------------
+		
+	jenkins setting with nexus
+
+	nexus is a artifatrey repository manager
+
+	build time stamp: yyyymmddhhmmss
+
+
+	cp webapp/target/webapp.war webapp/target/webapp-$BUILD_ID.war   --- type in exuteshell in build triggs.
+
+
+	cp webapp/target/webapp.war webapp/target/webapp-$BUILD_ID.war  for nexus 
+
+
+
+	https://github.com/bhanuprakash678910/mavenproj.git (git hub maven project link )
+
+
+
+	nexus insatll on centos 7 (http://clusterfrak.com/sysops/app_installs/nexus_install/)
+
+	---http://3.95.152.87:8081/nexus/ publicip =:8081/nexus
+
+	nexus defualt passwrd username: admin pass: admin123
+
+	manageplugins in jenkins gui install nexuas artifatrey plugin
+	after timestamp plugins install
+
+
+
+
+
+	1.install docker on jenkins server 
+
+	2. docker run -d --name sonarqube -p 9000:9000 sonarqube
+	(docker run -d -p hostport:containerport --name conatinername imagename) 
+
+	docker inspect conatinername : it will give you container ip address
+
+	 publicip of jenkins server:9000
+	 
+	 soanarqube is code analasys/quality tool  
+
+
+	2 jfrog:    docker run --name arifactory -d -p 8081:8081 docker.bintray.io/jfrog
+
+				   publicip of jenkins server:8081
+				   
+				   admin 
+				   password
+				   
+	------------
+	master slave consept: distrubute work 
+
+	ubuntu server: install java
+
+	jenkins-- managejenkins--managenode--addnode--
+
+	remote root directory --: /home/ubuntu/rpworkspace
+
+	labels --:infosys(groupname)
+
+	usage--: as much as possible
+
+	hostname: pubip
+
+	-------------
+
+	Jenkins file:
+
+		 pipeline:
+		 
+		   1 scripted pipeline
+		   2 declarative pipeline
+		   
+		   scripted pipeline:
+		   
+		   
+		   node() {
+			 stage ("name1") {
+			   sh ''' script/command '''
+			}
+			stage		 
+
+
+			
+		declarative pipeline:
+		
+		
+			agent any
+			stages{ 
+			 stage(){
+			   steps{
+			   
+
+
+
+	 
+	  
+	  
