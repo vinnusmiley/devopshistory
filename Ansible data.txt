@@ -1,0 +1,163 @@
+--------------------
+Ansible Controller Ansible Node1 Ansible Node2
+---------------------
+Ansible Controller
+
+sudo su -
+vi /etc/hosts
+	10.1.1.10(Private ip)	controller
+	10.1.1.20				client1
+	10.1.1.30				client2
+root@:#	ping clinet1
+vi /etc/hostname
+	Controller1
+cat /etc/hosts
+---------------------
+Ansible Node1
+sudo su -
+vi /etc/hosts
+	10.1.1.10(Private ip)	controller
+	10.1.1.20				client1
+	10.1.1.30				client2
+vi /etc/hostname
+	client1
+--------------------------
+ Ansible Node2
+ sudo su -
+vi /etc/hosts
+	10.1.1.10(Private ip)	controller
+	10.1.1.20				client1
+	10.1.1.30				client2
+vi /etc/hostname
+	client2
+--------------------
+Ansible Controller1
+root@#vi /etc/ssh/sshd_config
+		passwordAuthentication yes
+		permitrootlogin yes
+	  service sshd restart
+	  passwd
+			
+					(leave blank hit Enter)
+			
+----------------------
+Ansible Node1
+root@#vi /etc/ssh/sshd_config
+		passwordAuthentication yes
+		permitrootlogin yes
+	  service sshd restart
+	  passwd
+			
+					(leave blank hit Enter)
+			
+----------------------
+Ansible Node2
+root@#vi /etc/ssh/sshd_config
+		passwordAuthentication yes
+		permitrootlogin yes
+	  service sshd restart
+	  passwd
+			
+					(leave blank hit Enter)
+			
+----------------------
+Ansible Controller1
+root@# ssh root@client1
+		root@client1 passwd: (our aim is without entering passwd communicate with ssh-key pair)
+		cat ./ssh/authorized_keys(Ansible Node1)
+		ls .ssh
+		ssh-keygen
+		
+		ssh-copy-id root@client1
+		ssh-copy-id root@client2
+		ssh-copy-id root@controller
+		
+		ssh root@client1		====> root@client1:~#
+
+Installing Ansible on Ubuntu
+Ubuntu builds are available in a PPA here.
+
+To configure the PPA on your machine and install Ansible run these commands:
+
+$ sudo apt update
+$ sudo apt install software-properties-common
+$ sudo add-apt-repository --yes --update ppa:ansible/ansible
+$ sudo apt install ansible
+
+root@controller:~#nano hosts
+					[controller]
+					controller
+					[servers]
+					client1
+					client2
+					[allservers]
+					controller
+					client1
+					client2
+				ansible -i hosts all -m ping
+				ansible -i hosts all -a uptime
+				ansible -i hosts all -a free
+				ansible -i hosts all -a 'ls /tmp'
+				ansible -i hosts all -a 'touch /tmp/file1'
+				ansible -i hosts all -a 'ls /tmp'
+				ansible -i hosts all -a 'cat /etc/passwd >> /tmp/file1'
+				ansible -i hosts client1 -a 'cat /etc/passwd'
+				ansible -i hosts all -m user -a 'name=adminuser state=present'
+				ansible -i hosts all -a 'apt update'
+				ansible -i hosts all -m package -a 'name=tree state=present'
+				
+--------------------------------------
+Lab setup using docker 
+1.Download the docker image from the hub.docker.com
+docker pull sreeharshav/ubuntu16:withssh2.0_V2
+docker pull sreeharshav/ubuntu16:ansible2.75_V2
+2. Create a network below
+docker network create --subnet 172.20.0.0/16 --gateway 172.20.0.254 ansible_nw
+3.create three machines as below using the above network.
+docker run --rm -dit --name controller --hostname controller --network ansible_nw sreeharshav/ubuntu16:ansible2.75_V2
+docker run --rm -dit --name web1 --hostname web1 -p 8000:80--network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name web2 --hostname web2 -p 8001:80--network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name web3 --hostname web3 -p 8002:80--network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name app1 --hostname app1 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name app2 --hostname app1 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name app3 --hostname app1 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name db1 --hostname db1 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name db2 --hostname db2 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name db3 --hostname db3 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+docker run --rm -dit --name db4 --hostname db4 --network ansible_nw sreeharshav/ubuntu16:withssh2.0_V2
+4.Go in to the Controller
+	docker exec -it controller /bin/bash
+5. ping machine 2,3,4
+6.Install ansible using below command
+	apt-get install ansible -y
+7.Run ansible --version and you should get respone as ansible2.7.5
+8.Create a file called hosts using following command
+	nano hosts
+9.Add the following in the hosts file and save it.
+nano hosts
+[local]
+localhost
+[web]
+web1
+web2
+web3
+[app]
+app1
+app2
+app3
+[db]
+db1
+db2
+db3
+db4
+root@controller:/# ansible - hosts web -m ping
+				   ping web1
+				   ansible - hosts all -m ping
+				   nano /tmp/testing
+				   ls /tmp/
+				   ansible -i hosts app -m copy -a "src=/tmp/testing dest=/tmp/testing"
+				   ansible -i hosts app -a "ls /tmp/"
+				   ansible -i hosts web:app -m ping
+				   ansible -i hosts 'all:!app' -m ping
+				   ansible -i hosts 'web:&app' -m ping      					//like a when diagram if hosts are common then it will show here..
+				   ansible -i hosts 'all:!db:web:&app' -m ping

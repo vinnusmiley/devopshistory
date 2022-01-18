@@ -1,0 +1,69 @@
+root@#	vi /lib/systemd/system/docker.service		//Docker Slave
+		-H unix:// -H tcp://0.0.0.0:2375			//Docker Slave
+root@#		systemctl daemon-reload
+root@#		systemctl restart docker
+root@#		watch -n 1 docker ps 
+			docker stop $(docker ps -aq)
+			
+
+sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
+root@#	sudo usermod -aG root jenkins			//Jenkins Server
+root@#	sudo usermod -aG docker jenkins			//Jenkins Server
+		sudo service jenkins restart
+		docker login
+
+jenkins@# docker -H 10.1.1.20:2375 run --rm -dit --name dockertesting -p 8000:80 vinnuvikki/pipelinetestprod:v2		//Jenkins Server
+Script console to delete all jobs:
+for(j in jenkins.model.Jenkins.getInstance().getProjects()) {
+    j.delete();
+}
+Project Role Pattern:
+java.*
+python.*		
+
+chmod 664 /var/run/docker.sock
+chmod 777 /var/run/docker.sock
+#!/bin/bash
+echo "========================"
+pwd
+echo "========================"
+ls -al
+echo "========================"
+docker build -t vinnuvikki/pipelinetestprod:${BUILD_NUMBER} .
+docker push vinnuvikki/pipelinetestprod:${BUILD_NUMBER}
+docker -H tcp://10.1.1.20:2375 stop dockertesting || true
+docker -H tcp://10.1.1.20:2375 run --rm -dit --name dockertesting --hostname dockertesting -p 8000:80 vinnuvikki/pipelinetestprod:${BUILD_NUMBER}
+
+
+docker run --name myjenkins -p 9090:8080 -p 50000:50000 -v /home/vinnu/Music/jenks:/var/jenkins_home jenkins/jenkins:latest
+docker exec -it myjenks "cat /var/jenkins_home/secrets/initialAdminPassword"
+watch -n 1 docker ps
+http://3.17.74.46:8080/github-webhook/
+
+As part of Automation upscale - LINA Code Coverage (Cisco )Project Perform code coverage activities
+
+Collect code coverage data and Validate data after Publish it into Cerebro tool.This is the tool to Analyze the data for teams and showcase to client.
+
+Next Generation (NG) Dashboard is used the Grafana dash boards for Elastic Search query to get the data from back-end server and Display as Graphical representation using Grafana
+
+As part of KINETIC IOT TECHOPS (Cisco) Project it is totally based on Kubernetes Environment.
+
+It is used by Terraform scripts to create Env on AWS EKS and After setting up Using Helm charts to Deploy all the required services.
+My Job is implement inplace upgrade charts in Helm and After successful upgrade check whether dependent services are working fine or not.
+Once all services working fine i use to a raise a PR and merge in devlopment branch once its approved it will deploy on Production level
+
+Implemented migration using cloud services like AWS from physical to cloud environment.
+
+Used ElasticSearch, Log stash, and Kibana (ELK) for maintaining system Logs and Bugzilla for tracking code bugs.
+
+Performed regular snapshots for EBS volumes using CPM (Cloud Protection manager).
+
+Utilized AWS Route53 to manage DNS zones and also give public DNS names to elastic load balancers.
+
+ Created Python scripts to totally automate AWS services which includes web servers, ELB, 
+Cloud Front distribution, database, EC2 and database security groups 
+and application configuration, this script creates stacks, single servers, or joins web servers to stacks.
+
+jenkins
+f9e0f41210804dfe9d2bd9217d9b470e
+docker pull vinnuvikki/pipelinetestprod:1
