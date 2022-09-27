@@ -1,5 +1,4 @@
 	 jenkins plugins
-	 
 		 1 install sugessted plugins
 		 2 selected plugins to install
 		 3 required plugins (*close the window)
