@@ -60,7 +60,7 @@ Performed regular snapshots for EBS volumes using CPM (Cloud Protection manager)
 
 Utilized AWS Route53 to manage DNS zones and also give public DNS names to elastic load balancers.
 
- Created Python scripts to totally automate AWS services which includes web servers, ELB, 
+Created Python scripts to totally automate AWS services which includes web servers, ELB, 
 Cloud Front distribution, database, EC2 and database security groups 
 and application configuration, this script creates stacks, single servers, or joins web servers to stacks.
 
