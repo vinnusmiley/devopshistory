@@ -6,7 +6,7 @@ m841xwazkwim36cwnxt3syo04     worker-1            Ready               Active    
 whes3dmckolbe93b14adj2vwt     worker-2            Ready               Active                                  19.03.6
 ubuntu@manager-1:~$ docker node --help
 
-Usage:	docker node COMMAND
+Usage:docker node COMMAND
 
 Manage Swarm nodes
 
