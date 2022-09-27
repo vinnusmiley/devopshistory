@@ -4,7 +4,7 @@ docker run -it --name myubuntu1 ubuntu
 docker run -it --name myhttpd httpd
 docker run -it --name tomcat1 tomcat:9.0
 docker run -it --name tomcat1 -p 8888:8080 tomcat:9.0
-docker ps
+docker ps -a
 docker run -it myjenkins jenkins
 docker run -it mynginx nginx
 docker run -it mynginx nginx
