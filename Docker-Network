@@ -1,6 +1,6 @@
 ubuntu@worker-2:~$ docker run -dit --name c1 alpine
 Unable to find image 'alpine:latest' locally
-latest: Pulling from library/alpine
+latest: Pulling from library/alpine.
 cbdbe7a5bc2a: Pull complete 
 Digest: sha256:9a839e63dad54c3a6d1834e29692c8492d93f90c59c978c1ed79109ea4fb9a54
 Status: Downloaded newer image for alpine:latest
