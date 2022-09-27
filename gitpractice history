@@ -4,7 +4,7 @@ git config --global user.name "vinnu"
 git init gitprac
 ls -a
 cd gitprac/
-ls -a
+ls
 cd .git/
 
 ls -a .git
