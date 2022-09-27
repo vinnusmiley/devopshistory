@@ -1,6 +1,6 @@
---------------------
+-------------------
 Ansible Controller Ansible Node1 Ansible Node2
----------------------
+--------------------
 Ansible Controller
 
 sudo su -
