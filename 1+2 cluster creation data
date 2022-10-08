@@ -1599,3 +1599,29 @@ Bringing machine 'node-02' up with 'virtualbox' provider...
     master    Ready    control-plane,master   32m   v1.20.11
     node-01   Ready    <none>                 18m   v1.20.11
     node-02   Ready    <none>                 78s   v1.20.11
+    vagrant@master:~$ kubectl get ns
+    NAME              STATUS   AGE
+    default           Active   37m
+    kube-node-lease   Active   37m
+    kube-public       Active   37m
+    kube-system       Active   37m
+    vagrant@master:~$ kubectl get pods
+    No resources found in default namespace.
+    vagrant@master:~$ kubectl get pods -A
+    NAMESPACE     NAME                             READY   STATUS    RESTARTS   AGE
+    kube-system   coredns-74ff55c5b-7npct          1/1     Running   0          36m
+    kube-system   coredns-74ff55c5b-dhhmm          1/1     Running   0          36m
+    kube-system   etcd-master                      1/1     Running   0          37m
+    kube-system   kube-apiserver-master            1/1     Running   0          37m
+    kube-system   kube-controller-manager-master   1/1     Running   0          37m
+    kube-system   kube-flannel-ds-g4w7q            1/1     Running   0          6m58s
+    kube-system   kube-flannel-ds-k9bbp            1/1     Running   0          36m
+    kube-system   kube-flannel-ds-lq8pc            1/1     Running   0          24m
+    kube-system   kube-proxy-9bk4g                 1/1     Running   0          36m
+    kube-system   kube-proxy-9m5h5                 1/1     Running   0          24m
+    kube-system   kube-proxy-rhmz4                 1/1     Running   0          6m58s
+    kube-system   kube-scheduler-master            1/1     Running   0          37m
+    vagrant@master:~$ kubectl get services
+    NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+    kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   39m
+
