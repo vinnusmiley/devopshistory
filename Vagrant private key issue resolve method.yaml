@@ -1,0 +1,9 @@
+vagrant up
+vagrant ssh master
+sudo su -
+wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
+cat authorized_keys
+cat authorized_keys >> /etc/ssh/authorized_keys
+exit
+vagrant up >> Now remain vm are provision again and start the nodes
+vagrant ssh master
